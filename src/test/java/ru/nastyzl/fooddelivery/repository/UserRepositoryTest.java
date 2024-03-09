@@ -105,4 +105,10 @@ public class UserRepositoryTest {
         assertThat(entityManager.find(UserEntity.class, newVendor.getId())).isNull();
     }
 
+    @Test
+    void findByUsername() {
+        String name = "admin";
+        UserEntity user = userRepository.findByUsername(name);
+        assertThat(user).isNotNull();
+    }
 }

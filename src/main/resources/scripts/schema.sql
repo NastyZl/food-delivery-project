@@ -12,10 +12,12 @@ create table addresses
 );
 
 DROP TABLE IF EXISTS users cascade;
+DROP SEQUENCE IF EXISTS user_sequence;
+create sequence user_sequence start 1 increment 20;
 create table users
 (
     role         varchar(31)   not null,
-    id           int8          not null,
+    id           int8          not null DEFAULT nextval('user_sequence'),
     email        varchar(320)  not null unique,
     first_name   varchar(255)  not null,
     last_name    varchar(255)  not null,
@@ -26,8 +28,7 @@ create table users
     address_id   int8 unique,
     primary key (id)
 );
-DROP SEQUENCE IF EXISTS user_sequence;
-create sequence user_sequence start 1 increment 20;
+
 
 alter table users
     add constraint "users_addresses_id-foreign" foreign key (address_id) references addresses;
