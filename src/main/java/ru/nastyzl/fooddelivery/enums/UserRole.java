@@ -24,10 +24,10 @@ public enum UserRole {
     }
 
     public static class Values {
-        public static final String ADMIN = "admin";
-        public static final String VENDOR = "vendor";
-        public static final String CUSTOMER = "customer";
-        public static final String COURIER = "courier";
+        public static final String ADMIN = "ROLE_ADMIN";
+        public static final String VENDOR = "ROLE_VENDOR";
+        public static final String CUSTOMER = "ROLE_CUSTOMER";
+        public static final String COURIER = "ROLE_COURIER";
 
     }
 }

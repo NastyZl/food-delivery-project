@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-public abstract class UserEntity {
+public class UserEntity {
     @Id
     @SequenceGenerator(name = "user_seq",
             sequenceName = "user_sequence",

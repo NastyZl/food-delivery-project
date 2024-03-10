@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.service;
+package ru.nastyzl.fooddelivery.security.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.nastyzl.fooddelivery.model.UserEntity;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.security.UserDetailsImpl;
+
+import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,10 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User" + username + "not found");
-        }
-        return new UserDetailsImpl(user);
+        Optional<UserEntity> user = userRepository.findByUsername(username);
+        user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+        return user.map(UserDetailsImpl::new).get();
     }
 }

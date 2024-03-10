@@ -108,7 +108,7 @@ public class UserRepositoryTest {
     @Test
     void findByUsername() {
         String name = "admin";
-        UserEntity user = userRepository.findByUsername(name);
+        Optional<UserEntity> user = userRepository.findByUsername(name);
         assertThat(user).isNotNull();
     }
 }

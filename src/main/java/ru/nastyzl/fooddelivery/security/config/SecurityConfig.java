@@ -1,13 +1,13 @@
-package ru.nastyzl.fooddelivery.config;
+package ru.nastyzl.fooddelivery.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.nastyzl.fooddelivery.service.UserDetailsServiceImpl;
+import ru.nastyzl.fooddelivery.security.service.UserDetailsServiceImpl;
 
 
 @EnableWebSecurity
@@ -28,21 +28,22 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().disable();
         http.authorizeHttpRequests()
-                .antMatchers("/auth/login", "/error").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/admin/test").hasRole("ADMIN")
+                .antMatchers("/auth/login", "/error", "/auth/registration").permitAll()
+                .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR")
                 .and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
                 .defaultSuccessUrl("/test", true)
-                .failureUrl("/auth/login?error");
+                .failureUrl("/auth/login?error")
+                .and()
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login");
         return http.build();
     }
 }

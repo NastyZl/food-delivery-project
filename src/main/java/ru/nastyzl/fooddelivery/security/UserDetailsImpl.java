@@ -1,10 +1,13 @@
 package ru.nastyzl.fooddelivery.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.nastyzl.fooddelivery.model.UserEntity;
+import ru.nastyzl.fooddelivery.enums.UserRole;
+import ru.nastyzl.fooddelivery.model.*;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
     private final UserEntity user;
@@ -15,7 +18,19 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(getRole(user)));
+    }
+
+    private String getRole(UserEntity user) {
+        if (user instanceof CustomerEntity)
+            return UserRole.CUSTOMER.getValue();
+        if (user instanceof VendorEntity)
+            return UserRole.VENDOR.getValue();
+        if (user instanceof CourierEntity)
+            return UserRole.COURIER.getValue();
+        if (user instanceof AdminEntity)
+            return UserRole.ADMIN.getValue();
+        else throw new RuntimeException("Роль не определена");
     }
 
     @Override
