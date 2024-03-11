@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create dish</title>
+</head>
+<body>
+<th:block th:include="/_header"></th:block>
+<th:block th:include="/_menu"></th:block>
+<h2>Добавление нового блюда</h2>
+<form th:action="@{/dish/save}" th:method="POST" enctype="multipart/form-data" th:object="${dishDto}">
+    <div>
+        <label for="dishName">Dish Name:</label>
+        <input th:type="text" id="dishName" placeholder="Введите название блюда" th:field="*{dishName}">
+    </div>
+
+    <div>
+        <label for="currentPrice">Current Price:</label>
+        <input type="number" id="currentPrice" placeholder="Введите цену" th:field="*{currentPrice}">
+    </div>
+
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+    </div>
+
+    <div>
+        <input type="hidden" th:field="*{imgPath}">
+        <label for="imgPath">Photo:</label>
+        <input type="file" id="imgPath" name="image" accept="image/png">
+    </div>
+
+    <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" th:field="*{quantity}">
+    </div>
+
+    <button type="submit">Сохранить блюдо</button>
+
+</form>
+</body>
+</html>

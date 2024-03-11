@@ -1,5 +1,7 @@
 package ru.nastyzl.fooddelivery.model;
 
+import ru.nastyzl.fooddelivery.enums.UserRole;
+
 import javax.persistence.*;
 
 @Entity
@@ -36,6 +38,10 @@ public class UserEntity {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
+
+    public UserRole getRole() {
+        return UserRole.CUSTOMER;
+    }
 
     public UserEntity() {
     }

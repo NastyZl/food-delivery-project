@@ -32,3 +32,16 @@ create table users
 
 alter table users
     add constraint "users_addresses_id-foreign" foreign key (address_id) references addresses;
+
+create table dishes
+(
+    id            bigserial primary key,
+    current_price double precision not null,
+    description   varchar(255),
+    dishname      varchar(255)     not null unique,
+    img_path      varchar(255)     not null,
+    quantity      integer          not null,
+    vendor_id     bigint
+        constraint "dishes_vendor_id_foreign"
+            references users
+);

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><title>Мои блюда</title></head>
+<body>
+<th:block th:include="/_header"></th:block>
+<th:block th:include="/_menu"></th:block>
+<h1>Мои блюда</h1>
+<table>
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Цена</th>
+        <th>Изображение</th>
+        <th>Количество</th>
+        <th>Изменить</th>
+        <th>Удалить</th>
+    </tr>
+    <tr th:each="dish : ${dishes}">
+        <td th:text="${dish.dishName}"></td>
+        <td th:text="${dish.description}"></td>
+        <td th:text="${dish.currentPrice}"></td>
+        <td><img th:src="@{/images/} + ${dish.imgPath}" alt="dish image"/></td>
+        <td th:text="${dish.quantity}"></td>
+        <form class="form-horizontal" th:action="@{'/dish/' + ${dish.id}}" th:method="PATCH">
+            <td>
+                <button type="submit">🗘</button>
+            </td>
+        </form>
+        <form class="form-horizontal" th:action="@{'/dish/' + ${dish.id}}" th:method="DELETE">
+            <td>
+                <button type="submit">Удалить</button>
+            </td>
+        </form>
+    </tr>
+</table>
+<input type="button" value="Добавить новое блюдо" onclick="location.href='/dish/new';"/>
+</body>
+</html>

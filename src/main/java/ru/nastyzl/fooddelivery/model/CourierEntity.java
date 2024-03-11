@@ -10,6 +10,11 @@ import javax.persistence.Entity;
 public class CourierEntity extends UserEntity {
     private Boolean availability;
 
+    @Override
+    public UserRole getRole() {
+        return UserRole.COURIER;
+    }
+
     public CourierEntity() {
     }
 

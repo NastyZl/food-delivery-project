@@ -37,10 +37,9 @@ public class AuthController {
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
-
         if (bindingResult.hasErrors())
             return "/auth/registration";
         userService.registerUser(user);
-        return "redirect: /auth/login";
+        return "redirect:/auth/login";
     }
 }

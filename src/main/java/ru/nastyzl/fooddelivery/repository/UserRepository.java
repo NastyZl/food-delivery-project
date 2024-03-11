@@ -22,4 +22,5 @@ public interface UserRepository<T extends UserEntity> extends JpaRepository<T, L
     List<CourierEntity> findAllCourier();
 
     Optional<UserEntity> findByUsername(String username);
+
 }
