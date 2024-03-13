@@ -5,8 +5,7 @@
     <title>Registration</title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${user}" >
     <label for="username">Введите имя пользователя: </label>
     <input type="text" th:field="*{username}" id="username"/>
     <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
@@ -19,7 +18,7 @@
 
     <label for="lastName">Введите фамилию: </label>
     <input type="text" th:field="*{lastName}" id="lastName"/>
-    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name Error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="${lastName}">Last name Error</div>
     <br/>
 
     <label for="email">Введите email: </label>
@@ -37,8 +36,48 @@
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
     <br/>
 
+    <select id="userRole" name="userRole" th:field="*{role}" onchange="showVendorFields()">
+        <option th:each="role : ${T(ru.nastyzl.fooddelivery.enums.UserRole).values()}"
+                th:if="${role != T(ru.nastyzl.fooddelivery.enums.UserRole).ADMIN}"
+                th:value="${role}"
+                th:text="${role.ruValue}"
+                th:selected="${role == T(ru.nastyzl.fooddelivery.enums.UserRole).CUSTOMER}"></option>
+    </select>
+    <br/>
+    <div id="vendorFields"  style="display: none;">
+        apartment: <input type="text"  th:field="*{apartment}" id="apartment" name="apartment">
+        <div style="color:red" th:if="${#fields.hasErrors('apartment')}" th:errors="*{apartment}">apartment Error</div>
+
+        city: <input type="text"  th:field="*{city}" id="city" name="city">
+        <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city Error</div>
+
+        entrance: <input type="text"  th:field="*{entrance}" id="entrance" name="entrance">
+        <div style="color:red" th:if="${#fields.hasErrors('entrance')}" th:errors="*{entrance}">entrance Error</div>
+
+        floor: <input type="text"  th:field="*{floor}" id="floor" name="floor">
+        <div style="color:red" th:if="${#fields.hasErrors('floor')}" th:errors="*{floor}">floor Error</div>
+
+        streetName: <input type="text"  th:field="*{streetName}" id="streetName" name="streetName">
+        <div style="color:red" th:if="${#fields.hasErrors('streetName')}" th:errors="*{streetName}">streetName Error</div>
+
+        streetNumber: <input type="text"  th:field="*{streetNumber}" id="streetNumber" name="streetNumber">
+        <div style="color:red" th:if="${#fields.hasErrors('streetNumber')}" th:errors="*{streetNumber}">streetNumber Error</div>
+
+    </div>
+
     <input type="submit" value="Sign up!"/>
 </form>
 
+
 </body>
 </html>
+<script>
+    function showVendorFields() {
+        let role = document.getElementById("userRole").value;
+        if (role === "ROLE_VENDOR") {
+            document.getElementById("vendorFields").style.display = "block";
+        } else {
+            document.getElementById("vendorFields").style.display = "none";
+        }
+    }
+</script>

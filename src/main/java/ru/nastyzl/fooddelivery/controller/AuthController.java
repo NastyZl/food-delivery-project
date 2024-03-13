@@ -1,16 +1,19 @@
 package ru.nastyzl.fooddelivery.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.nastyzl.fooddelivery.dto.UserDto;
+import ru.nastyzl.fooddelivery.enums.UserRole;
 import ru.nastyzl.fooddelivery.service.UserService;
 import ru.nastyzl.fooddelivery.util.UserValidator;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/auth")
@@ -34,11 +37,18 @@ public class AuthController {
         return "auth/registration";
     }
 
+    @Transactional
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors())
+
+        if (!Objects.equals(user.getRole(), UserRole.VENDOR.getValue()) && (bindingResult.hasFieldErrors("username") || bindingResult.hasFieldErrors("email")
+                || bindingResult.hasFieldErrors("firstName") || bindingResult.hasFieldErrors("lastName")
+                || bindingResult.hasFieldErrors("phone")))
             return "/auth/registration";
+        else if (bindingResult.hasErrors())
+            return "/auth/registration";
+
         userService.registerUser(user);
         return "redirect:/auth/login";
     }

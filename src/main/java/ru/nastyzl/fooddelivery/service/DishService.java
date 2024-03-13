@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface DishService {
     Optional<DishEntity> getByDishName(String dishName);
 
-    DishEntity save(DishDto dishDto);
+    DishEntity save(DishDto dishDto, Long vendorId);
 
     DishEntity update(DishDto dishDto);
 

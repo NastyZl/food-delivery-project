@@ -1,5 +1,6 @@
 package ru.nastyzl.fooddelivery.dto;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 
 import javax.validation.constraints.*;
@@ -12,12 +13,13 @@ public class DishDto {
     private Double currentPrice;
 
     @NotBlank(message = "Необходимо указать описание")
+    @Size(min=10, message = "Описание должно быть не менее 10 символов")
     @Size(max = 255, message = "Описание не должно превышать 255 символов")
     private String description;
 
     private VendorEntity vendorEntity;
 
-    private String imgPath;
+    private MultipartFile imgPath;
 
     @NotNull(message = "Необходимо указать количество")
     @PositiveOrZero(message = "Количество порций блюда не должно быть отрицательным числом")
@@ -55,11 +57,11 @@ public class DishDto {
         this.vendorEntity = vendorEntity;
     }
 
-    public String getImgPath() {
+    public MultipartFile getImgPath() {
         return imgPath;
     }
 
-    public void setImgPath(String imgPath) {
+    public void setImgPath(MultipartFile imgPath) {
         this.imgPath = imgPath;
     }
 

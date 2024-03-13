@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,8 +39,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .antMatchers("/admin/test").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/vendor/**").hasRole("VENDOR")
+                .antMatchers("/assets/img/**").permitAll()
                 .antMatchers("/auth/login", "/error", "/auth/registration", "/home", "/menu").permitAll()
                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR")
                 .and()
@@ -50,6 +52,11 @@ public class SecurityConfig {
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login");
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/resources/**");
     }
 
     @Bean

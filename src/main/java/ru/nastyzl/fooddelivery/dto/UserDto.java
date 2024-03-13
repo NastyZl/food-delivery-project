@@ -1,11 +1,18 @@
 package ru.nastyzl.fooddelivery.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 public class UserDto {
     private String username;
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     @NotBlank(message = "Необходимо указать имя")
     private String firstName;
@@ -19,6 +26,72 @@ public class UserDto {
     @Email(message = "Email должен быть корректным адресом электронной почты")
     private String email;
     private String password;
+
+    @NotBlank(message = "Необходимо указать город")
+    private String city;
+    @NotBlank(message = "Необходимо указать улицу")
+    private String streetName;
+
+    @NotBlank(message = "Необходимо указать номер дома")
+    private String streetNumber;
+
+    @NotBlank(message = "Необходимо указать квартиру")
+    private String apartment;
+    @NotNull(message = "Необходимо указать этаж'")
+    @Positive(message = "Отрицательным у нас не бывает")
+    private Integer floor;
+
+    @NotNull(message = "Необходимо указать подъезд'")
+    @Positive(message = "Отрицательным у нас не бывает")
+    private Integer entrance;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public String getStreetNumber() {
+        return streetNumber;
+    }
+
+    public void setStreetNumber(String streetNumber) {
+        this.streetNumber = streetNumber;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getEntrance() {
+        return entrance;
+    }
+
+    public void setEntrance(Integer entrance) {
+        this.entrance = entrance;
+    }
 
     public void setUsername(String username) {
         this.username = username;

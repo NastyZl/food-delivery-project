@@ -26,7 +26,7 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserDto userDto = (UserDto) target;
-        Optional<UserEntity> user = userService.getByUsername(userDto.getUsername());
+        Optional<? extends UserEntity> user = userService.getByUsername(userDto.getUsername());
         if (user.isPresent()) {
             errors.rejectValue("username", "", "Человек с таким именем пользователя уже существует.");
         }

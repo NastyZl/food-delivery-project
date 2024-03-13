@@ -22,7 +22,7 @@
             <div class="card" style="margin-top: 20px" th:each="dish : ${dishes}">
                 <div class="row no-gutters">
                     <div class="col-sm-5 d-flex justify-content-center">
-                        <img class="" height="150px" width="150px" th:src="@{${'/images/' + dish.imgPath}}" th:alt="${dish.dishName}">
+                        <img class="" height="150px" width="150px" th:src="@{${'/assets/img/' + dish.imgPath}}" th:alt="${dish.dishName}">
                     </div>
                     <div class="col-sm-7 d-flex justify-content-center">
                         <div class="card-body">

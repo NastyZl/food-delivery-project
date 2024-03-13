@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-public class UserEntity {
+public abstract class UserEntity {
     @Id
     @SequenceGenerator(name = "user_seq",
             sequenceName = "user_sequence",
@@ -39,9 +39,7 @@ public class UserEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
-    public UserRole getRole() {
-        return UserRole.CUSTOMER;
-    }
+    public abstract UserRole getRole();
 
     public UserEntity() {
     }

@@ -7,7 +7,7 @@
     <div class="header-bar">
         <th:block sec:authorize="isAuthenticated()">
             Hello
-            <a th:href="@{/accountInfo}" th:utext="${#request.userPrincipal.name}">..</a>
+            <a th:href="@{/account-info}" th:utext="${#request.userPrincipal.name}">..</a>
             &nbsp;|&nbsp;
             <form th:action="@{/logout}" th:method="POST">
                 <input type="submit" value="Logout" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;"/>

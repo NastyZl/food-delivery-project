@@ -11,7 +11,7 @@ public interface UserService {
 
     UserEntity registerUser(UserDto userDto);
 
-    Optional<UserEntity> getByUsername(String username);
+    Optional<? extends UserEntity> getByUsername(String username);
 
     List<DishEntity> getAllDishes(String username);
 
