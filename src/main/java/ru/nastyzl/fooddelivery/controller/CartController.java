@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.nastyzl.fooddelivery.dto.DishDto;
+import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.CustomerEntity;
 import ru.nastyzl.fooddelivery.service.CartService;
@@ -64,8 +65,49 @@ public class CartController {
         DishDto dishDto = dishService.getById(id);
         String username = principal.getName();
         CartEntity cart = cartService.addItemToCart(dishDto, quantity, username);
-        session.setAttribute("totalItems", cart.getTotalItems());
-        model.addAttribute("shoppingCart", cart);
+        //  session.setAttribute("totalItems", cart.getTotalItems());
+        model.addAttribute("cart", cart);
         return "redirect:" + request.getHeader("Referer");
+    }
+
+    @PostMapping(value = "/update-cart", params = "action=update")
+    public String updateCart(@RequestParam("id") Long id,
+                             @RequestParam("quantity") Integer quantity,
+                             Model model,
+                             Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        DishDto dishDto = dishService.getById(id);
+        String username = principal.getName();
+        try {
+            CartEntity cart = cartService.updateCart(dishDto, quantity, username);
+            model.addAttribute("cart", cart);
+        } catch (CustomerNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/cart/";
+    }
+
+    @PostMapping(value = "/update-cart", params = "action=delete")
+    public String deleteItem(@RequestParam("id") Long id,
+                             Model model,
+                             Principal principal,
+                             HttpSession session
+    ) {
+        if (principal == null) {
+            return "redirect:/login";
+        } else {
+            DishDto dishDto = dishService.getById(id);
+            String username = principal.getName();
+            CartEntity shoppingCart = null;
+            try {
+                shoppingCart = cartService.removeItemFromCart(dishDto, username);
+            } catch (CustomerNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            model.addAttribute("shoppingCart", shoppingCart);
+            return "redirect:/cart/";
+        }
     }
 }

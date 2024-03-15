@@ -51,7 +51,7 @@
                                 <p th:text="'$' + ${cartItem.unitPrice}"></p>
                             </td>
 
-                            <form th:action="@{/update-cart}" method="post">
+                            <form th:action="@{/cart/update-cart}" method="post">
                                 <input type="hidden" name="id" th:value="${cartItem.dish.id}">
 
                                 <td class="quantity-box">
