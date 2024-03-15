@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 public class AdminEntity extends UserEntity {
     @Transient
     private final UserRole role = UserRole.ADMIN;
+
     @Override
     public UserRole getRole() {
         return role;

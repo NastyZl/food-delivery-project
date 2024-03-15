@@ -12,15 +12,11 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface DishMapper {
 
-    @Mapping(target = "imgPath", expression = "java(convertMultipartFileToString(dishDto.getImgPath()))")
+    @Mapping(target = "imgPath", ignore = true)
     DishEntity dishDtoToEntity(DishDto dishDto);
 
-    @Mapping(target = "imgPath", expression = "java(convertStringToMultipartFile(dishEntity.getImgPath()))")
+    @Mapping(target = "imgPath", ignore = true)
     DishDto dishEntityToDto(DishEntity dishEntity);
-
-    default MultipartFile convertStringToMultipartFile(String path) {
-       return null;
-    }
 
     default String convertMultipartFileToString(MultipartFile file) {
         return StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));

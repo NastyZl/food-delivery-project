@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -17,33 +16,27 @@
 <th:block th:include="/_menu"></th:block>
 <div class="container" style="margin-top: 30px">
     <div class="row">
-
-        <div class="col-sm-9">
-            <div class="card" style="margin-top: 20px" th:each="dish : ${dishes}">
-                <div class="row no-gutters">
-                    <div class="col-sm-5 d-flex justify-content-center">
-                        <img class="" height="150px" width="150px" th:src="@{${'/assets/img/' + dish.imgPath}}" th:alt="${dish.dishName}">
-                    </div>
-                    <div class="col-sm-7 d-flex justify-content-center">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${dish.dishName}">Название</h5>
-                            <h4>₽ <span th:text="${dish.currentPrice}">сколько-то денег</span></h4>
-                            <p th:text="${dish.description}">Здесь должно быть описание блюда.</p>
-<!--                            <a href="#" th:href="@{/shop/viewproduct/{id}(id=${dish.id})}" class="btn btn-primary">View Product</a>-->
-                        </div>
+        <div class="products-single fix" th:each="dish : ${dishes}">
+            <form th:action="@{cart/add-to-cart}" method="post">
+                <div class="box-img-hover">
+                    <img th:src="'data:image/jpeg;base64,' + ${dish.imgPath}" class="img-fluid" alt="Image">
+                    <div class="mask-icon">
+                        <ul>
+                            <li><a th:href="@{/product-detail/{id}(id = ${dish.id})}" data-toggle="tooltip"
+                                   data-placement="right"
+                                   title="View"><i class="fas fa-eye"></i></a></li>
+                        </ul>
+                        <input type="hidden" th:value="${dish.id}" name="id" class="form-control">
+                        <input type="submit" class="btn hvr-hover" value="Add to cart">
                     </div>
                 </div>
-            </div>
+                <div class="why-text">
+                    <h4 th:text="${dish.dishName}"></h4>
+                    <h5 th:text="'₽' + ${dish.currentPrice}"></h5>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-
-
-
-
-<!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>-->
-<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
 </body>
 </html>

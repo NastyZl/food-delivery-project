@@ -41,6 +41,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/vendor/**").hasRole("VENDOR")
+                .antMatchers("/cart/**").hasRole("CUSTOMER")
                 .antMatchers("/assets/img/**").permitAll()
                 .antMatchers("/auth/login", "/error", "/auth/registration", "/home", "/menu").permitAll()
                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR")

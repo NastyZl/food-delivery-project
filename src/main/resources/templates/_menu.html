@@ -7,8 +7,8 @@
         Product List
     </a>
     |
-    <a th:href="@{/shoppingCart}">
-        My Cart
+    <a th:href="@{/cart/}">
+        Корзина
     </a>
     |
     <th:block sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')">

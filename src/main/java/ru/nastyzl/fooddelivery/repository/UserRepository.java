@@ -21,6 +21,6 @@ public interface UserRepository<T extends UserEntity> extends JpaRepository<T, L
     @Query("from CourierEntity")
     List<CourierEntity> findAllCourier();
 
-    Optional<? extends UserEntity> findByUsername(String username);
+    Optional<T> findByUsername(String username);
 
 }

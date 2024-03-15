@@ -31,6 +31,14 @@ public class DishServiceImpl implements DishService {
         return dishRepository.findByDishName(dishName);
     }
 
+    @Override
+    public DishDto getById(Long id) {
+        Optional<DishEntity> dishEntity = dishRepository.findById(id);
+        if (dishEntity.isPresent()) {
+            return dishMapper.dishEntityToDto(dishEntity.get());
+        } else throw new RuntimeException("Ошибка при попытке получить блюдо по ID");
+    }
+
 
     @Override
     public DishEntity update(DishDto dishDto) {
