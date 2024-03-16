@@ -12,4 +12,5 @@ public interface CartService {
     CartEntity updateCart(DishDto dishDto, Integer quantity, String username) throws CustomerNotFoundException;
 
     CartEntity removeItemFromCart(DishDto dishDto, String username) throws CustomerNotFoundException;
+    void deleteCartById(Long id) throws CustomerNotFoundException;
 }

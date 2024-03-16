@@ -39,7 +39,6 @@ public class DishServiceImpl implements DishService {
         } else throw new RuntimeException("Ошибка при попытке получить блюдо по ID");
     }
 
-
     @Override
     public DishEntity update(DishDto dishDto) {
         return null;

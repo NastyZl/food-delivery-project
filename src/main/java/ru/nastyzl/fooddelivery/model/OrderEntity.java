@@ -4,6 +4,7 @@ import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,11 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
+
+    @Column(name = "delivery_date")
+    private LocalDateTime deliveryDate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cust_id", referencedColumnName = "id", nullable = false)
@@ -32,15 +38,79 @@ public class OrderEntity {
     @Column(name = "payment_type", nullable = false)
     private PaymentType paymentType;
 
-
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
     @Column(name = "cust_address", nullable = false)
     private String customerAddress;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
+
+
+    public CustomerEntity getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerEntity customer) {
+        this.customer = customer;
+    }
+
+    public VendorEntity getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(VendorEntity vendor) {
+        this.vendor = vendor;
+    }
+
+    public CourierEntity getCourier() {
+        return courier;
+    }
+
+    public void setCourier(CourierEntity courier) {
+        this.courier = courier;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public List<OrderItemEntity> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItemEntity> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -48,5 +118,21 @@ public class OrderEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public LocalDateTime getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 }

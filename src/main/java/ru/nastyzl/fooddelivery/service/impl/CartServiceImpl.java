@@ -2,12 +2,14 @@ package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import ru.nastyzl.fooddelivery.dto.DishDto;
 import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.DishMapper;
 import ru.nastyzl.fooddelivery.model.*;
 import ru.nastyzl.fooddelivery.repository.CartItemRepository;
 import ru.nastyzl.fooddelivery.repository.CartRepository;
+import ru.nastyzl.fooddelivery.repository.DishRepository;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.UserService;
@@ -20,13 +22,16 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository<CustomerEntity> customerRepository;
+
+    private final DishRepository dishRepository;
     private final UserService userService;
     private final DishMapper mapper;
 
-    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository<CustomerEntity> customerRepository, UserService userService, DishMapper mapper) {
+    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository, UserRepository<CustomerEntity> customerRepository, DishRepository dishRepository, UserService userService, DishMapper mapper) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.customerRepository = customerRepository;
+        this.dishRepository = dishRepository;
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -41,6 +46,7 @@ public class CartServiceImpl implements CartService {
         }
 
         Set<CartItemEntity> cartItemList = cart.getCartItems();
+
 
         CartItemEntity cartItem = find(cartItemList, dishDto.getId());
 
@@ -103,6 +109,24 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteCartById(Long id) throws CustomerNotFoundException {
+        Optional<CartEntity> cart = cartRepository.findById(id);
+        if (cart.isPresent()) {
+            if (!ObjectUtils.isEmpty(cart.get().getCartItems())) {
+                cartItemRepository.deleteAll(cart.get().getCartItems());
+            }
+
+            cart.get().getCartItems().clear();
+            cart.get().setTotalPrise(0d);
+            cart.get().setTotalItems(0);
+            cartRepository.save(cart.get());
+        } else {
+            throw new CustomerNotFoundException("Cart with id " + id + " not found");
+        }
+    }
+
     private CartItemEntity find(Set<CartItemEntity> cartItemEntities, Long dishId) {
         return cartItemEntities.stream()
                 .filter(item -> item.getDish().getId().equals(dishId))
@@ -125,4 +149,9 @@ public class CartServiceImpl implements CartService {
     public CartEntity getCart(String username) {
         return customerRepository.findByUsername(username).map(CustomerEntity::getCart).orElse(null);
     }
+
+    public VendorEntity getVendorByDishName(String dishName) throws CustomerNotFoundException {
+        return dishRepository.findByDishName(dishName).orElseThrow(() -> new CustomerNotFoundException("вендор не найден")).getVendorEntity();
+    }
+
 }
