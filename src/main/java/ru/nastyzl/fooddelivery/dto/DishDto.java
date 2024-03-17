@@ -17,7 +17,8 @@ public class DishDto {
     @Size(max = 255, message = "Описание не должно превышать 255 символов")
     private String description;
 
-    private UserDto userDto;
+    //    private UserDto userDto;
+    private Long vendorId;
 
     private MultipartFile imgPath;
 
@@ -57,12 +58,12 @@ public class DishDto {
         this.description = description;
     }
 
-    public UserDto getUserDto() {
-        return userDto;
+    public Long getVendorId() {
+        return vendorId;
     }
 
-    public void setUserDto(UserDto userDto) {
-        this.userDto = userDto;
+    public void setVendorId(Long vendorId) {
+        this.vendorId = vendorId;
     }
 
     public MultipartFile getImgPath() {

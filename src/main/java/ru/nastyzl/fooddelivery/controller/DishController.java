@@ -26,7 +26,6 @@ import java.util.Objects;
 public class DishController {
     private final DishService dishService;
 
-
     private final UserService userService;
 
     public DishController(DishService dishService, UserService userService) {
@@ -71,7 +70,7 @@ public class DishController {
     @DeleteMapping("/{id}")
     public String deleteDish(@PathVariable("id") Long id) {
         dishService.deleteById(id);
-        return "redirect:/vendor/dishes";
+        return "redirect:/vendor/show-dishes";
     }
 
     @PatchMapping("/{id}")

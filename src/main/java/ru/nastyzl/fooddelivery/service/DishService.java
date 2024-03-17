@@ -1,6 +1,7 @@
 package ru.nastyzl.fooddelivery.service;
 
 import ru.nastyzl.fooddelivery.dto.DishDto;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 
 import java.util.List;
@@ -19,5 +20,6 @@ public interface DishService {
 
     List<DishDto> findAll();
 
+    Long getVendorIdByDishId(Long id) throws DishNotFoundException;
 
 }

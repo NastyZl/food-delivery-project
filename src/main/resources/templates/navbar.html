@@ -1,0 +1,114 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+                data-mdb-collapse-init
+                class="navbar-toggler"
+                type="button"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAjJJREFUSEvF1svLjVEUx/EPZWRALjESGbiGyMAIJYSJiRJCBi5FQin/AMklyqUYuJQyMVGi3E0VcitSlAFCzEzIs7SOjuO85+z3PIN31dNTa6/1++7dXnuvPcgA2aAB4uoE3oDxeFv9z+UES31d19MJfBsLcR/zU6nUVwt8FptyxRNSqdRXC7wDx1JhKW5gO44X+GqBR+B1BYr/J0xJtRLf127kblW9EldS5FI1kTUo9XVkdwNH8mWswg8Mxa9++PqEl4BXI1YbNgmvUOqrBV5QHac7qRDH6271lfpqgYdjVio8xjeU+orAw7A+q7hbUfYyHpV+Ht8juXmPt+BUL4r9yNmK063gcJ7sh0gvoW3BK3A11WbjUS/KbXLm4GH6l+Na64pnVJfDkwzY2XRd1uXvwuEUmY7nreDB+IDROcO5dYmZ/wzT8LmqoTF5Af3Xjw9hdyYswq2a8CW4nhr7sa+h13pzTcbLHAxowOtYXDaNXh6Pind9gcN/oupG2zLgIPb2QI4FHakum6iVsKOIvf5r7e7qIdXL417Vf+dlVFT6xqoXfymcwEhcwLKMf5AvmZ/dwDE+Fk8xKoM/Yi1udoHHnl7MAo3QyJuZ/39SO3WncTiDxZkR7TBqIB4C7Sw6V9RHQzPO62a8bxdc0hZjjw9kcqM7tdNq7lh7ms5u21mWgJsFC7f5z+s0KrpPKwHHW+tFKTHjpjYdy55XHInrqqKZWAh/kwXWMbxkxYW8/oUNGPg3hEV8H9DhnY8AAAAASUVORK5CYII="
+                     height="80%"
+                     alt="MDB Logo"
+                     loading="lazy"/>
+            </a>
+            <!-- Left links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/menu}">Меню</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">О нас</a>
+                </li>
+                <th:block sec:authorize="hasAnyRole('ROLE_CUSTOMER')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{#}">Мои заказы</a>
+                    </li>
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_VENDOR')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/vendor/dishes}">Мои блюда</a>
+                    </li>
+                </th:block>
+            </ul>
+            <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+            <!-- Cart -->
+            <th:block sec:authorize="hasAnyRole('ROLE_CUSTOMER')">
+                <a class="text-reset me-3" th:href="@{/cart/}">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAbJJREFUSEvtlr0rhVEcxz/Xy4YMysA/YENKUt4yKSwyKGXBoMxM3gazxVtGZbAZlctIJAujlAEliywinm+dW6ene+859z7HvYtfPcPzPOf8Puf3flKUSVJl4vIPLpnnbVcvA0t/SH4CpoBjMUoJFm8a2IuD+wA9kkGgO7D13xG0GXiOg23OAHASGHwATGR05ionfX8EmgLCu4BzF1j/14GFQOAboM3Wla+BtAB3gcCTwL4vWOsugY6E8DegEfgqBDwPbCQEr2brD65eXQ+8ApVFwmWlSuglvt8F1vojYLhI8CYwl22vD3gMODSb14C05yE+gKvIzT/FgqsBJUiNOcC4JzjvMh+LpWAbmAU+gSFA7c8lD9FQ0JNVfMEq/msXKfZ/JXrXxEsE1uZFQKVR5XmAYGDx6qIsb/cEB3G1zZoBVN9bwHvsEK1RSEYA9WaVYU7xjXFGgT04TgGNz4w0APdArfkwmg9eKFg13G8Uqz4rLHBvdJE4s951jVJOJE4uKZCbd4ymXVNitmLN204Tgh7j8iBgKdG4VJJd5DBGlt+aHh8sxp4J7V5WaIzdGj1XlA38C/dzQB+cS5lrAAAAAElFTkSuQmCC"/>
+                </a>
+            </th:block>
+
+            <!-- Profile -->
+            <div class="nav-item dropdown">
+                <a
+                        class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                        href="#"
+                        id="navbarDropdownMenuAvatar"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                >
+                    <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAb1JREFUSEvN1k3ITUEYB/DfK18lJcmOhCyUKCs7lGJhQcpGoXyUlJ0US5LsUD42rFCilLKwYMVCCYWVfKWUkgUbCTN1jt6ue95nzts5XbOd5/x/M819Zu6YEY2xEbkmA0/BNiyvFv0SN/C7zSbawmtwBcsGkFfYiceleBt4Pe5iekP4d2zAoxK8FJ6F95gbhH7AUvyI8FJ4Ly5FYdV8Pv+bUW0pfAH7o7Bq/jQOR7Wl8EXsi8Kq+fM4ENWWwkdxPAqr5o/gVFRbCueefRGFVb28JLXWm6i2FM45l7ErCDyDQxGa59vAM6obanNDcF7YHvzqGq4XugNbxvX0J1zD7RKwrmmz4za5Ye1/Dy/A1nQjrUiPxKLUWlMHtvQz/fDepiN4hlv4GG052vFKnMSmKGhg/k51e+VXa+iYCM431TlMa4nW5fmh2J2e0KvDvm+Ct+P6JMHxn+XW2oh7g1nD4Plppe8wswM4R3zBQuT3+u8YBp/FwY7QOuZYOrITEfw5ne28juEnWD0RvBivO0bruNn41nRz5T9zD3uCc2s+b4LX4n5P8Do8aILnYFVP8FN8bYJ7Mv+Nja7M3hYyMvgPElg8H/XErXYAAAAASUVORK5CYII="
+                            class="rounded-circle"
+                            height="25"
+                            alt="user"
+                            loading="lazy"
+                    />
+                </a>
+
+                <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="navbarDropdownMenuAvatar"
+                >
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li>
+
+                            <a class="dropdown-item" th:href="@{/account-info}">Мой профиль</a>
+                        </li>
+                        <li>
+                            <form th:action="@{/logout}" th:method="POST">
+                                <input type="submit" value="Выйти"
+                                       class="dropdown-item"/>
+                            </form>
+                        </li>
+                    </th:block>
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/auth/login}">Войти</a>
+                        </li>
+
+                        <li>
+                            <a class="nav-item nav-link" th:href="@{/auth/registration}">Зарегистирроваться</a>
+                        </li>
+                    </th:block>
+
+                </ul>
+            </div>
+        </div>
+        <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+
+</nav>
+<!-- Navbar -->

@@ -29,6 +29,12 @@ public class MainController {
         return "menu";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "navbar-test";
+
+    }
+
     @GetMapping("/account-info")
     public String accountInfo(Model model) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

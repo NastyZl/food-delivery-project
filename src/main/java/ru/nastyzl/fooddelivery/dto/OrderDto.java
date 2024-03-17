@@ -2,12 +2,10 @@ package ru.nastyzl.fooddelivery.dto;
 
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
-import ru.nastyzl.fooddelivery.model.*;
+import ru.nastyzl.fooddelivery.model.CartItemEntity;
+import ru.nastyzl.fooddelivery.model.CustomerEntity;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class OrderDto {

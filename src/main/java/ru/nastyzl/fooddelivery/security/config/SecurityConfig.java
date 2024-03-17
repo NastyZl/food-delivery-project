@@ -2,6 +2,7 @@ package ru.nastyzl.fooddelivery.security.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 
 
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -36,16 +38,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/vendor/**").hasRole("VENDOR")
-                .antMatchers("/cart/**").hasRole("CUSTOMER")
-                .antMatchers("/assets/img/**").permitAll()
-                .antMatchers("/auth/login", "/error", "/auth/registration", "/home", "/menu").permitAll()
-                .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR")
-                .and()
+        http.authorizeHttpRequests((authorizeHttpRequests) ->
+                        authorizeHttpRequests
+                                .antMatchers("/admin/").hasRole("ADMIN")
+                                .antMatchers("/vendor/").hasRole("VENDOR")
+                                .antMatchers("/cart/**").hasRole("CUSTOMER")
+                                .antMatchers("/resource/**", "/webjars/**", "/websocket/**").permitAll()
+                                .antMatchers("/auth/login", "/error", "/auth/registration", "/home", "/menu").permitAll()
+                                .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
                 .defaultSuccessUrl("/menu", true)
@@ -57,7 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/resources/**");
+        return (web) -> web.ignoring().antMatchers("/images/**");
     }
 
     @Bean

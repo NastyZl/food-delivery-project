@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.nastyzl.fooddelivery.dto.DishDto;
 import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
+import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.CustomerEntity;
 import ru.nastyzl.fooddelivery.service.CartService;
@@ -48,6 +50,7 @@ public class CartController {
         }
 
         model.addAttribute("cart", cart);
+        model.addAttribute("errorMessage", false);
 
         // session.setAttribute("totalItems", cart.getTotalItems());
 
@@ -60,7 +63,7 @@ public class CartController {
                                 HttpServletRequest request,
                                 Model model,
                                 Principal principal,
-                                HttpSession session) {
+                                HttpSession session) throws DishNotFoundException, DifferentVendorsException {
 
         DishDto dishDto = dishService.getById(id);
         String username = principal.getName();
@@ -110,4 +113,5 @@ public class CartController {
             return "redirect:/cart/";
         }
     }
+
 }

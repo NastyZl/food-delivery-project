@@ -2,6 +2,7 @@ package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.nastyzl.fooddelivery.dto.DishDto;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.DishMapper;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
@@ -68,6 +69,13 @@ public class DishServiceImpl implements DishService {
             throw new RuntimeException("Ошибка при сохранении нового блюда");
         }
 
+    }
+
+    @Override
+    public Long getVendorIdByDishId(Long id) throws DishNotFoundException {
+        return dishRepository.findById(id)
+                .map(dish -> dish.getVendorEntity().getId())
+                .orElseThrow(DishNotFoundException::new);
     }
 
 }
