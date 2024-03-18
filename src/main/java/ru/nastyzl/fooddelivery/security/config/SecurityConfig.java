@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -46,8 +45,8 @@ public class SecurityConfig {
                                 .antMatchers("/admin/").hasRole("ADMIN")
                                 .antMatchers("/vendor/").hasRole("VENDOR")
                                 .antMatchers("/cart/**").hasRole("CUSTOMER")
-                                .antMatchers("/resource/**", "/webjars/**", "/websocket/**").permitAll()
-                                .antMatchers("/auth/login", "/error", "/auth/registration", "/home", "/menu").permitAll()
+                                .antMatchers("/resource/**", "/images/**", "/assets/img/**").permitAll()
+                                .antMatchers("/auth/login", "/404", "/auth/registration", "/home", "/menu").permitAll()
                                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
@@ -56,11 +55,6 @@ public class SecurityConfig {
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login");
         return http.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/images/**");
     }
 
     @Bean

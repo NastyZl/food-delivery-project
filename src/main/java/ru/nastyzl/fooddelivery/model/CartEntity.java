@@ -21,7 +21,7 @@ public class CartEntity {
     @Column(name = "total_items")
     private Integer totalItems;
 
-    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "cart")
+    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "cart", fetch = FetchType.EAGER)
     private Set<CartItemEntity> cartItems = new HashSet<>();
 
     public CartEntity() {

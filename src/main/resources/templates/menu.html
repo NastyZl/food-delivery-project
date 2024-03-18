@@ -27,12 +27,13 @@
         <div class="col" th:each="dish : ${dishes}">
             <form th:action="@{cart/add-to-cart}" method="post">
                 <div class="card">
-                    <img th:src="'data:image/jpeg;base64,' + ${dish.imgPath}" class="img-fluid" alt="Image">
+                    <img th:src="'assets/img/' +${dish.vendor.id}+ '/'+${dish.imgPath}" class="img-fluid" alt="Image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${dish.dishName}">Заголовок карточки</h5>
                         <p class="card-text" th:text="${dish.description}"></p>
                         <input type="hidden" th:value="${dish.id}" name="id" class="form-control">
                         <h6 class="card-title" th:text="'₽' + ${dish.currentPrice}">Заголовок карточки</h6>
+                        <p class="card-text" th:text="${dish.vendor.firstName} + ' ' + ${dish.vendor.lastName} "></p>
 
                         <th:block
                                 sec:authorize="!hasRole('ROLE_ADMIN') and !hasRole('ROLE_VENDOR') and !hasRole('ROLE_COURIER')">

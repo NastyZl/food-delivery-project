@@ -6,7 +6,7 @@ public class CartItemDto {
 
     private CartDto cart;
 
-    private DishDto dish;
+    private DishCreateDto dish;
 
     private Integer quantity;
 
@@ -31,11 +31,11 @@ public class CartItemDto {
         this.cart = cart;
     }
 
-    public DishDto getDish() {
+    public DishCreateDto getDish() {
         return dish;
     }
 
-    public void setDish(DishDto dish) {
+    public void setDish(DishCreateDto dish) {
         this.dish = dish;
     }
 

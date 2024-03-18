@@ -2,14 +2,13 @@ package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
+import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.AddressMapper;
 import ru.nastyzl.fooddelivery.mapper.UserMapper;
-import ru.nastyzl.fooddelivery.model.AddressEntity;
-import ru.nastyzl.fooddelivery.model.DishEntity;
-import ru.nastyzl.fooddelivery.model.UserEntity;
-import ru.nastyzl.fooddelivery.model.VendorEntity;
+import ru.nastyzl.fooddelivery.model.*;
 import ru.nastyzl.fooddelivery.repository.AddressRepository;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.service.UserService;
@@ -35,6 +34,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public VendorEntity getVendorByUsername(String username) throws CustomerNotFoundException {
+        return userRepository.findAllVendor().stream().filter(vendor -> vendor.getUsername().equals(username)).findFirst().orElseThrow(() -> new CustomerNotFoundException("вендор не найден"));
+    }
+
+
+    @Override
+    public CustomerEntity getCustomerByUsername(String username) throws CustomerNotFoundException {
+        return userRepository.findAllCustomer().stream().filter(vendor -> vendor.getUsername().equals(username)).findFirst().orElseThrow(() -> new CustomerNotFoundException("пользователь не найден"));
+    }
+
+    @Override
     public UserEntity registerUser(UserDto userDto) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         switch (userDto.getRole()) {
@@ -53,6 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Optional<? extends UserEntity> getByUsername(String username) {
         return userRepository.findByUsername(username);
     }

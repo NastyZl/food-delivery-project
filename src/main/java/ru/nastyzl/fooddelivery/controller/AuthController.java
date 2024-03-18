@@ -13,7 +13,6 @@ import ru.nastyzl.fooddelivery.service.UserService;
 import ru.nastyzl.fooddelivery.util.UserValidator;
 
 import javax.validation.Valid;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/auth")
@@ -42,12 +41,13 @@ public class AuthController {
     public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
 
-        if (!Objects.equals(user.getRole(), UserRole.VENDOR.getValue()) && (bindingResult.hasFieldErrors("username") || bindingResult.hasFieldErrors("email")
+        if (user.getRole().equals(UserRole.VENDOR.getValue()) && bindingResult.hasErrors()) {
+            return "/auth/registration";
+        } else if (bindingResult.hasFieldErrors("username") || bindingResult.hasFieldErrors("email")
                 || bindingResult.hasFieldErrors("firstName") || bindingResult.hasFieldErrors("lastName")
-                || bindingResult.hasFieldErrors("phone")))
+                || bindingResult.hasFieldErrors("phone")) {
             return "/auth/registration";
-        else if (bindingResult.hasErrors())
-            return "/auth/registration";
+        }
 
         userService.registerUser(user);
         return "redirect:/auth/login";

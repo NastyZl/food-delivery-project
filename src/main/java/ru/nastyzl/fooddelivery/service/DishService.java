@@ -1,6 +1,8 @@
 package ru.nastyzl.fooddelivery.service;
 
-import ru.nastyzl.fooddelivery.dto.DishDto;
+import ru.nastyzl.fooddelivery.dto.DishCreateDto;
+import ru.nastyzl.fooddelivery.dto.DishShowDto;
+import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 
@@ -10,16 +12,24 @@ import java.util.Optional;
 public interface DishService {
     Optional<DishEntity> getByDishName(String dishName);
 
-    DishDto getById(Long id);
+    List<DishShowDto> getAllDish();
 
-    DishEntity save(DishDto dishDto, Long vendorId);
+    List<DishShowDto> getAllDishesForVendor(Long vendorId);
 
-    DishEntity update(DishDto dishDto);
+    DishShowDto getById(Long id);
+
+    DishEntity save(DishCreateDto dishCreateDto, String username) throws CustomerNotFoundException;
+
+    DishEntity update(DishCreateDto dishCreateDto);
 
     void deleteById(Long id);
 
-    List<DishDto> findAll();
+    List<DishCreateDto> findAll();
 
     Long getVendorIdByDishId(Long id) throws DishNotFoundException;
+
+    DishShowDto dishEntityToDishShowDto(DishEntity dishEntity);
+
+    DishEntity dishShowDtoToDishEntity(DishShowDto dishShowDto);
 
 }

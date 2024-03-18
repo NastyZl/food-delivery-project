@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
+import ru.nastyzl.fooddelivery.service.DishService;
 import ru.nastyzl.fooddelivery.service.UserService;
 
 @Controller
@@ -13,15 +15,18 @@ import ru.nastyzl.fooddelivery.service.UserService;
 public class VendorController {
 
     private final UserService userService;
+    private final DishService dishService;
 
-    public VendorController(UserService userService) {
+    public VendorController(UserService userService, DishService dishService) {
         this.userService = userService;
+        this.dishService = dishService;
     }
 
     @GetMapping("/dishes")
-    public String showAllDishes(Authentication authentication, Model model) {
+    public String showAllDishes(Authentication authentication, Model model) throws CustomerNotFoundException {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("dishes", userService.getAllDishes(principal.getUsername()));
+        Long vendorId = userService.getVendorByUsername(principal.getUsername()).getId();
+        model.addAttribute("dishes", dishService.getAllDishesForVendor(vendorId));
         return "vendor/show-dishes";
     }
 

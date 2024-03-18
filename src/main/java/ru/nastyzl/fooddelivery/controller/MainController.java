@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.nastyzl.fooddelivery.dto.DishDto;
+import ru.nastyzl.fooddelivery.dto.DishShowDto;
 import ru.nastyzl.fooddelivery.service.DishService;
 
 import java.util.List;
@@ -23,10 +23,15 @@ public class MainController {
 
     @GetMapping("/menu")
     public String menu(Model model) {
-        List<DishDto> dishes = dishService.findAll();
+        List<DishShowDto> dishes = dishService.getAllDish();
         model.addAttribute("dishes", dishes);
         model.addAttribute("size", dishes.size());
         return "menu";
+    }
+
+    @GetMapping("/404")
+    public String error() {
+        return "exception/error";
     }
 
     @GetMapping("/test")

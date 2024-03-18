@@ -2,6 +2,7 @@ package ru.nastyzl.fooddelivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import ru.nastyzl.fooddelivery.dto.DishShowDto;
 import ru.nastyzl.fooddelivery.model.*;
 
 import java.util.List;
@@ -21,6 +22,6 @@ public interface UserRepository<T extends UserEntity> extends JpaRepository<T, L
     @Query("from CourierEntity")
     List<CourierEntity> findAllCourier();
 
-    Optional<T> findByUsername(String username);
+    Optional<? extends UserEntity> findByUsername(String username);
 
 }

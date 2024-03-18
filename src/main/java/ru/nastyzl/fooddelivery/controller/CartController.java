@@ -2,17 +2,16 @@ package ru.nastyzl.fooddelivery.controller;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.nastyzl.fooddelivery.dto.DishDto;
 import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
-import ru.nastyzl.fooddelivery.model.CustomerEntity;
 import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.DishService;
 import ru.nastyzl.fooddelivery.service.UserService;
@@ -37,22 +36,20 @@ public class CartController {
     }
 
     @GetMapping("/")
-    public String addToCart(Model model, Principal principal, HttpSession session) {
+    @Transactional
+    public String addToCart(Model model, Principal principal, HttpSession session) throws CustomerNotFoundException {
         if (principal == null) {
             return "redirect:auth/login";
         }
-        CustomerEntity user = (CustomerEntity) userService.getByUsername(principal.getName()).get();
-        CartEntity cart = user.getCart();
-        if (cart == null) {
-            model.addAttribute("check", "You don't have any items in your cart");
+        CartEntity cart = cartService.getCart(principal.getName());
+        if (cart.getCartItems().isEmpty()) {
+            model.addAttribute("check", "Корзина пустая");
         } else {
             model.addAttribute("grandTotal", cart.getTotalPrise());
         }
 
         model.addAttribute("cart", cart);
         model.addAttribute("errorMessage", false);
-
-        // session.setAttribute("totalItems", cart.getTotalItems());
 
         return "cart/cart-form";
     }
@@ -63,11 +60,8 @@ public class CartController {
                                 HttpServletRequest request,
                                 Model model,
                                 Principal principal,
-                                HttpSession session) throws DishNotFoundException, DifferentVendorsException {
-
-        DishDto dishDto = dishService.getById(id);
-        String username = principal.getName();
-        CartEntity cart = cartService.addItemToCart(dishDto, quantity, username);
+                                HttpSession session) throws DishNotFoundException, DifferentVendorsException, CustomerNotFoundException {
+        CartEntity cart = cartService.addItemToCart(dishService.getById(id), quantity, principal.getName());
         //  session.setAttribute("totalItems", cart.getTotalItems());
         model.addAttribute("cart", cart);
         return "redirect:" + request.getHeader("Referer");
@@ -77,18 +71,12 @@ public class CartController {
     public String updateCart(@RequestParam("id") Long id,
                              @RequestParam("quantity") Integer quantity,
                              Model model,
-                             Principal principal) {
+                             Principal principal) throws CustomerNotFoundException {
         if (principal == null) {
             return "redirect:/login";
         }
-        DishDto dishDto = dishService.getById(id);
-        String username = principal.getName();
-        try {
-            CartEntity cart = cartService.updateCart(dishDto, quantity, username);
-            model.addAttribute("cart", cart);
-        } catch (CustomerNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        CartEntity cart = cartService.updateCart(dishService.getById(id), quantity, principal.getName());
+        model.addAttribute("cart", cart);
         return "redirect:/cart/";
     }
 
@@ -97,18 +85,11 @@ public class CartController {
                              Model model,
                              Principal principal,
                              HttpSession session
-    ) {
+    ) throws CustomerNotFoundException {
         if (principal == null) {
             return "redirect:/login";
         } else {
-            DishDto dishDto = dishService.getById(id);
-            String username = principal.getName();
-            CartEntity shoppingCart = null;
-            try {
-                shoppingCart = cartService.removeItemFromCart(dishDto, username);
-            } catch (CustomerNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            CartEntity shoppingCart = cartService.removeItemFromCart(dishService.getById(id), principal.getName());
             model.addAttribute("shoppingCart", shoppingCart);
             return "redirect:/cart/";
         }

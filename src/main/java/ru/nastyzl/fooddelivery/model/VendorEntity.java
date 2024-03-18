@@ -18,7 +18,6 @@ public class VendorEntity extends UserEntity {
     @OneToMany(mappedBy = "vendorEntity", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<DishEntity> dishes;
 
-
     @Override
     public UserRole getRole() {
         return UserRole.VENDOR;

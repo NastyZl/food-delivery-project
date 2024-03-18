@@ -3,8 +3,17 @@ package ru.nastyzl.fooddelivery.dto;
 import javax.validation.constraints.*;
 
 public class UserDto {
+    private Long id;
     private String username;
     private String role;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getRole() {
         return role;

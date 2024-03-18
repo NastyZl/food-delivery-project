@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-8 mx-auto rounded border p-4 m-4">
             <h2 class="text-center mb-5">Добавление нового блюда</h2>
-            <form th:action="@{/dish/save}" th:method="POST" enctype="multipart/form-data" th:object="${dishDto}">
+            <form th:action="@{/dish/save}" th:method="POST" enctype="multipart/form-data" th:object="${dishCreateDto}">
 
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Название</label>
@@ -49,7 +49,8 @@
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Фото</label>
                     <div class="col-sm-8">
-                        <input class="form-control" th:name="image" type="file" th:field="*{imgPath}">
+                        <input type="hidden" th:field="*{imgPath}">
+                        <input class="form-control" th:name="image" type="file">
                         <p th:if="${#fields.hasErrors('imgPath')}" th:errorclass="text-danger"
                            th:errors="*{imgPath}"></p>
                     </div>

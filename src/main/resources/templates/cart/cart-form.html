@@ -31,7 +31,7 @@
                             <th>Цена</th>
                             <th>Количество</th>
                             <th>Стоимость</th>
-                            <th>***</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -40,7 +40,7 @@
                             <td class="thumbnail-img">
                                 <a href="#">
                                     <img class="img-fluid"
-                                         th:src="'data:image/jepg;base64,' + ${cartItem.dish.imgPath}" alt=""/>
+                                         th:src="'../assets/img/' + ${cartItem.dish.vendorEntity.id}+ '/'+${cartItem.dish.imgPath}" alt=""/>
                                 </a>
                             </td>
 

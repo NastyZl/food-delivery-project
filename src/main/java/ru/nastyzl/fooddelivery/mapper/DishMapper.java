@@ -1,24 +1,23 @@
 package ru.nastyzl.fooddelivery.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import ru.nastyzl.fooddelivery.dto.DishDto;
+import org.mapstruct.factory.Mappers;
+import ru.nastyzl.fooddelivery.dto.DishCreateDto;
+import ru.nastyzl.fooddelivery.dto.VendorDto;
 import ru.nastyzl.fooddelivery.model.DishEntity;
-
-import java.util.Objects;
+import ru.nastyzl.fooddelivery.model.VendorEntity;
 
 @Mapper(componentModel = "spring")
 public interface DishMapper {
+    DishMapper INSTANCE = Mappers.getMapper( DishMapper.class );
 
-    @Mapping(target = "imgPath", ignore = true)
-    DishEntity dishDtoToEntity(DishDto dishDto);
+    DishEntity dishDtoToEntity(DishCreateDto dishCreateDto);
 
-    @Mapping(target = "imgPath", ignore = true)
-    DishDto dishEntityToDto(DishEntity dishEntity);
+    VendorEntity vendorDtoToVendorEntity(VendorDto dto);
+    VendorDto vendorEntityToVendorDto(VendorEntity entity);
 
-    default String convertMultipartFileToString(MultipartFile file) {
-        return StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-    }
+    DishCreateDto dishEntityToDto(DishEntity dishEntity);
+
+
+
 }
