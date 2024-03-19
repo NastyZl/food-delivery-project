@@ -36,9 +36,11 @@ public class OrderEntity {
     private Double totalAmount;
 
     @Column(name = "payment_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
     @Column(name = "order_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @Column(name = "cust_address", nullable = false)

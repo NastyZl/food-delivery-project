@@ -40,8 +40,8 @@
                 </td>
             </form>
             <form class="form-horizontal" th:action="@{'/dish/' + ${dish.id}}" th:method="DELETE">
-                <td>
-                    <button type="submit" th:onclick="return confirm('Вы уверены?')">Удалить</button>
+                <td >
+                    <button type="submit" th:text="${dish.deleted} ? 'Восстановить' : 'Удалить'"  th:onclick="return confirm('Вы уверены?')">Удалить</button>
                 </td>
             </form>
         </tr>

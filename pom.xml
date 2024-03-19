@@ -73,11 +73,10 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->
 		<dependency>
 			<groupId>org.telegram</groupId>
-			<artifactId>telegrambots</artifactId>
-			<version>${telegram.version}</version>
+			<artifactId>telegrambots-spring-boot-starter</artifactId>
+			<version>6.9.7.1</version>
 		</dependency>
 
 		<dependency>

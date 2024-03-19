@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery;
+package ru.nastyzl.fooddelivery.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

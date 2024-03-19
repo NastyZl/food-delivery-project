@@ -9,11 +9,11 @@ import ru.nastyzl.fooddelivery.model.CartItemEntity;
 import java.util.List;
 
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Long> {
-    @Query("SELECT item FROM CartItemEntity item WHERE item.dish.id = :id")
-    List<CartItemEntity> findAllByDish(
-            @Param("id") Long dishId);
+    @Query("SELECT item.cart.id FROM CartItemEntity item WHERE item.dish.id = :id")
+    List<Long> findCartIdsByDishId(@Param("id") Long dishId);
     @Modifying
     @Query("DELETE FROM CartItemEntity item WHERE item.dish.id = :id")
     void deleteAllByDishId(@Param("id") Long dishId);
+    List<CartItemEntity> findByDish_IdAndCart_Id(Long dishId, Long cartId);
 
 }

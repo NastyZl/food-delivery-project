@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.security;
+package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

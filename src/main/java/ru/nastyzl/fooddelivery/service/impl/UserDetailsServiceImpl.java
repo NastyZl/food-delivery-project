@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.security.service;
+package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.nastyzl.fooddelivery.model.UserEntity;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
-import ru.nastyzl.fooddelivery.security.UserDetailsImpl;
 
 import java.util.Optional;
 

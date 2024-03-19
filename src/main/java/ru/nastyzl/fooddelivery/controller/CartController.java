@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
+import ru.nastyzl.fooddelivery.model.CustomerEntity;
 import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.DishService;
 import ru.nastyzl.fooddelivery.service.UserService;
@@ -37,12 +38,13 @@ public class CartController {
 
     @GetMapping("/")
     @Transactional
-    public String addToCart(Model model, Principal principal, HttpSession session) throws CustomerNotFoundException {
+    public String addToCart(Model model, Principal principal, HttpSession session) throws UserNotFoundException {
         if (principal == null) {
             return "redirect:auth/login";
         }
-        CartEntity cart = cartService.getCart(principal.getName());
-        if (cart.getCartItems().isEmpty()) {
+        CustomerEntity user = userService.getCustomerByUsername(principal.getName());
+        CartEntity cart = user.getCart();
+        if (cart == null) {
             model.addAttribute("check", "Корзина пустая");
         } else {
             model.addAttribute("grandTotal", cart.getTotalPrise());
@@ -60,7 +62,7 @@ public class CartController {
                                 HttpServletRequest request,
                                 Model model,
                                 Principal principal,
-                                HttpSession session) throws DishNotFoundException, DifferentVendorsException, CustomerNotFoundException {
+                                HttpSession session) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
         CartEntity cart = cartService.addItemToCart(dishService.getById(id), quantity, principal.getName());
         //  session.setAttribute("totalItems", cart.getTotalItems());
         model.addAttribute("cart", cart);
@@ -71,7 +73,7 @@ public class CartController {
     public String updateCart(@RequestParam("id") Long id,
                              @RequestParam("quantity") Integer quantity,
                              Model model,
-                             Principal principal) throws CustomerNotFoundException {
+                             Principal principal) throws UserNotFoundException {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -85,7 +87,7 @@ public class CartController {
                              Model model,
                              Principal principal,
                              HttpSession session
-    ) throws CustomerNotFoundException {
+    ) throws UserNotFoundException {
         if (principal == null) {
             return "redirect:/login";
         } else {

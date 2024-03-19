@@ -15,6 +15,16 @@ public class DishShowDto {
 
     private Integer quantity;
 
+    private boolean isDeleted;
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public Long getId() {
         return id;
     }

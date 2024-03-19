@@ -62,6 +62,10 @@ public class CartEntity {
     }
 
 
+    public void setCartItems(Set<CartItemEntity> cartItems) {
+        this.cartItems = cartItems;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -69,4 +73,5 @@ public class CartEntity {
     public Long getId() {
         return id;
     }
+
 }

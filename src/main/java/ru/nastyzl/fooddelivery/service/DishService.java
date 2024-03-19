@@ -2,7 +2,7 @@ package ru.nastyzl.fooddelivery.service;
 
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
-import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 
@@ -18,11 +18,11 @@ public interface DishService {
 
     DishShowDto getById(Long id);
 
-    DishEntity save(DishCreateDto dishCreateDto, String username) throws CustomerNotFoundException;
+    DishEntity save(DishCreateDto dishCreateDto, String username) throws UserNotFoundException;
 
     DishEntity update(DishCreateDto dishCreateDto);
 
-    void deleteById(Long id);
+    void changeDeleteFlagById(Long id);
 
     List<DishCreateDto> findAll();
 

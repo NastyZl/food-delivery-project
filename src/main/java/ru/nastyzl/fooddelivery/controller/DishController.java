@@ -1,16 +1,17 @@
 package ru.nastyzl.fooddelivery.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
-import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
+import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.DishService;
-import ru.nastyzl.fooddelivery.service.UserService;
 import ru.nastyzl.fooddelivery.util.FileUploadUtil;
 
 import javax.validation.Valid;
@@ -21,12 +22,11 @@ import java.security.Principal;
 @RequestMapping("/dish")
 public class DishController {
     private final DishService dishService;
+    private final CartService cartService;
 
-    private final UserService userService;
-
-    public DishController(DishService dishService, UserService userService) {
+    public DishController(DishService dishService, CartService cartService) {
         this.dishService = dishService;
-        this.userService = userService;
+        this.cartService = cartService;
     }
 
     @GetMapping("/new")
@@ -35,7 +35,7 @@ public class DishController {
     }
 
     @PostMapping("/save")
-    public String saveDish(@Valid @ModelAttribute("dishCreateDto") DishCreateDto dishCreateDto, BindingResult bindingResult, @RequestParam("image") MultipartFile multipartFile, Principal principal) throws IOException, CustomerNotFoundException {
+    public String saveDish(@Valid @ModelAttribute("dishCreateDto") DishCreateDto dishCreateDto, BindingResult bindingResult, @RequestParam("image") MultipartFile multipartFile, Principal principal) throws IOException, UserNotFoundException {
         if (multipartFile.isEmpty()) {
             bindingResult.addError(new FieldError("dishCreateDto", "imgPath", "Необходимо добавить фотографию блюда."));
         } else {
@@ -49,13 +49,16 @@ public class DishController {
         if (bindingResult.hasErrors()) {
             return "dish/dish-form";
         }
-
         return "redirect:/vendor/dishes";
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public String deleteDish(@PathVariable("id") Long id) {
-        dishService.deleteById(id);
+        if (!dishService.getById(id).isDeleted()) {
+            cartService.removeProductFromCarts(id);
+        }
+        dishService.changeDeleteFlagById(id);
         return "redirect:/vendor/dishes";
     }
 

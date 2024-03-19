@@ -32,7 +32,18 @@ public class DishEntity {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
     public DishEntity() {
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Long getId() {

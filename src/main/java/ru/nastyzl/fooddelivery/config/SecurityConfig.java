@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.security.config;
+package ru.nastyzl.fooddelivery.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
-import ru.nastyzl.fooddelivery.security.service.UserDetailsServiceImpl;
+import ru.nastyzl.fooddelivery.service.impl.UserDetailsServiceImpl;
 
 import java.util.Arrays;
 
@@ -46,7 +46,7 @@ public class SecurityConfig {
                                 .antMatchers("/vendor/").hasRole("VENDOR")
                                 .antMatchers("/cart/**").hasRole("CUSTOMER")
                                 .antMatchers("/resource/**", "/images/**", "/assets/img/**").permitAll()
-                                .antMatchers("/auth/login", "/404", "/auth/registration", "/home", "/menu").permitAll()
+                                .antMatchers("/auth/login", "/404", "/auth/registration", "/send", "/menu").permitAll()
                                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")

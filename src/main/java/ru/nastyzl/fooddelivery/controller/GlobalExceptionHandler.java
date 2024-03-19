@@ -3,9 +3,9 @@ package ru.nastyzl.fooddelivery.controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.nastyzl.fooddelivery.exception.CustomerNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -16,8 +16,8 @@ public class GlobalExceptionHandler {
         return "redirect:/menu";
     }
 
-    @ExceptionHandler({CustomerNotFoundException.class})
-    public String handleDifferentVendorsException(CustomerNotFoundException ex, RedirectAttributes redirectAttributes) {
+    @ExceptionHandler({UserNotFoundException.class})
+    public String handleDifferentVendorsException(UserNotFoundException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("message", ex);
         return "redirect:/404";
     }
