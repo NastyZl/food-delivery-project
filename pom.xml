@@ -15,8 +15,8 @@
 	<description>Graduation project</description>
 	<properties>
 		<java.version>11</java.version>
-		<telegram.version>6.8.0</telegram.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<telegrambots.version>6.9.7.1</telegrambots.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,6 +69,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
@@ -76,26 +86,11 @@
 		<dependency>
 			<groupId>org.telegram</groupId>
 			<artifactId>telegrambots-spring-boot-starter</artifactId>
-			<version>6.9.7.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<version>${telegrambots.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>static</directory>
-				<targetPath>static</targetPath>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

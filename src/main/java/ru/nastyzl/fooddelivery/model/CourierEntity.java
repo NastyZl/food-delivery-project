@@ -40,6 +40,7 @@ public class CourierEntity extends UserEntity {
     public CourierEntity() {
     }
 
+
     public Boolean getAvailability() {
         return availability;
     }

@@ -34,9 +34,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">О нас</a>
                 </li>
-                <th:block sec:authorize="hasAnyRole('ROLE_CUSTOMER')">
+                <th:block sec:authorize="hasAnyRole('ROLE_CUSTOMER', 'ROLE_VENDOR')">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{#}">Мои заказы</a>
+                        <a class="nav-link" th:href="@{/order/my-orders}">Заказы</a>
                     </li>
                 </th:block>
                 <th:block sec:authorize="hasRole('ROLE_VENDOR')">
@@ -99,10 +99,9 @@
                         </li>
 
                         <li>
-                            <a class="nav-item nav-link" th:href="@{/auth/registration}">Зарегистрироваться</a>
+                            <a class="nav-item nav-link" th:href="@{/auth/registration}">Регистрация</a>
                         </li>
                     </th:block>
-
                 </ul>
             </div>
         </div>

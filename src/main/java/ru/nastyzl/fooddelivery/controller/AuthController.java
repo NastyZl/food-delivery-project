@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
+import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.service.UserService;
 import ru.nastyzl.fooddelivery.util.UserValidator;
 
@@ -38,7 +39,7 @@ public class AuthController {
 
     @Transactional
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) {
+    public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) throws InvalidRoleException {
         userValidator.validate(user, bindingResult);
 
         if (user.getRole().equals(UserRole.VENDOR.getValue()) && bindingResult.hasErrors()) {

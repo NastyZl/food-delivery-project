@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.bot.TelegramBotService;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
+import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
 import ru.nastyzl.fooddelivery.exception.OrderNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartItemEntity;
@@ -37,9 +38,16 @@ public class OrderServiceImpl implements OrderService {
         this.telegramBotService = telegramBotService;
     }
 
+    /**
+     * Save order and delete cart,
+     * @param orderDto transfer for order
+     * @return saves order
+     * @throws UserNotFoundException if there is no user with the courier role in the database
+     */
+
     @Override
     @Transactional
-    public OrderEntity save(OrderDto orderDto) throws UserNotFoundException {
+    public OrderEntity save(OrderDto orderDto) throws UserNotFoundException, CartNotFoundException {
         OrderEntity order = new OrderEntity();
         order.setOrderDate(LocalDateTime.now());
         order.setCustomer(orderDto.getCart().getCustomer());
@@ -85,12 +93,21 @@ public class OrderServiceImpl implements OrderService {
                 order.setDeliveryDate(LocalDateTime.now());
             }
         } else throw new OrderNotFoundException("Ошибка при смене статуса заказа");
-
     }
 
     @Override
-    public List<OrderEntity> findAll(String username) {
-        return null;
+    public List<OrderEntity> findAllForCustomer(String username) throws UserNotFoundException {
+        return orderRepository.findAllByCustomerId(userService.getCustomerByUsername(username).getId());
+    }
+
+    @Override
+    public List<OrderEntity> findAllForVendor(String username) throws UserNotFoundException {
+        return orderRepository.findAllByVendorId(userService.getVendorByUsername(username).getId());
+    }
+
+    @Override
+    public Optional<OrderEntity> findById(Long id) {
+        return orderRepository.findById(id);
     }
 
     @Override

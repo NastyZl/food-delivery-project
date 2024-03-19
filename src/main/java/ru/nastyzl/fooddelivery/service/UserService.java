@@ -1,6 +1,7 @@
 package ru.nastyzl.fooddelivery.service;
 
 import ru.nastyzl.fooddelivery.dto.UserDto;
+import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.*;
 
@@ -15,7 +16,7 @@ public interface UserService {
 
     Optional<CourierEntity> getCourierByUsername(String username);
 
-    UserEntity registerUser(UserDto userDto);
+    UserEntity registerUser(UserDto userDto) throws InvalidRoleException;
 
     boolean activateCourier(String username, Long chatId);
 

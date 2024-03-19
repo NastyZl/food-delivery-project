@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
+import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
@@ -37,6 +38,10 @@ public class CartServiceImpl implements CartService {
     public CartEntity addItemToCart(DishShowDto dishDto, Integer quantity, String username) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
         CustomerEntity user = userService.getCustomerByUsername(username);
         CartEntity cart = user.getCart();
+        if (dishDto.isDeleted()) {
+            throw new DishNotFoundException("Это блюдо уже недоступно");
+        }
+
         if (cart == null) {
             cart = new CartEntity();
         } else if (checkIfVendorOfAllDishesMatches(cart.getCartItems(), dishService.getVendorIdByDishId(dishDto.getId()))) {
@@ -47,7 +52,6 @@ public class CartServiceImpl implements CartService {
 
         CartItemEntity cartItem = find(cartItemList, dishDto.getId());
 
-//        DishEntity dish = mapper.dishDtoToEntity(dishDto);
         DishEntity dish = dishService.dishShowDtoToDishEntity(dishDto);
 
         if (cartItem == null) {
@@ -88,6 +92,14 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    /**
+     * Delete dish from cart
+     *
+     * @param dishDto  transfer from dish
+     * @param username name cart owner
+     * @return user's cart
+     * @throws UserNotFoundException user not found
+     */
     @Override
     @Transactional
     public CartEntity removeItemFromCart(DishShowDto dishDto, String username) throws UserNotFoundException {
@@ -107,9 +119,15 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    /**
+     * Delete cart and its cartItem
+     *
+     * @param id cart ID
+     * @throws CartNotFoundException cart with this ID don't found
+     */
     @Override
     @Transactional
-    public void deleteCartById(Long id) throws UserNotFoundException {
+    public void deleteCartById(Long id) throws CartNotFoundException {
         Optional<CartEntity> cart = cartRepository.findById(id);
         if (cart.isPresent()) {
             if (!ObjectUtils.isEmpty(cart.get().getCartItems())) {
@@ -121,7 +139,7 @@ public class CartServiceImpl implements CartService {
             cart.get().setTotalItems(0);
             cartRepository.save(cart.get());
         } else {
-            throw new UserNotFoundException("Cart with id " + id + " not found");
+            throw new CartNotFoundException("Cart with id " + id + " not found");
         }
     }
 
@@ -149,6 +167,13 @@ public class CartServiceImpl implements CartService {
         return userService.getCustomerByUsername(username).getCart();
     }
 
+    /**
+     * Get the vendor by cart ID.
+     *
+     * @param id cart ID
+     * @return vendor for cart
+     * @throws UserNotFoundException vendor not found
+     */
     @Override
     public VendorEntity getVendorByCartID(Long id) throws UserNotFoundException {
         Optional<CartEntity> cart = cartRepository.findById(id);
@@ -169,8 +194,14 @@ public class CartServiceImpl implements CartService {
                 .anyMatch(dish -> !dish.getVendorEntity().getId().equals(vendorId));
     }
 
+    /**
+     * Removes dish from all carts by dishId.
+     *
+     * @param dishId dish ID
+     */
+
     @Transactional
-    public void removeProductFromCarts(Long dishId) {
+    public void removeDishFromCarts(Long dishId) {
         List<CartEntity> allCart = cartRepository.findAll();
         for (CartEntity cart : allCart) {
             List<CartItemEntity> items = cartItemRepository.findByDish_IdAndCart_Id(dishId, cart.getId());

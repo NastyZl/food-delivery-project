@@ -44,6 +44,16 @@ public abstract class UserEntity {
     public UserEntity() {
     }
 
+    public UserEntity(String username, String password, String firstName, String lastName, String email, String phone, AddressEntity address) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

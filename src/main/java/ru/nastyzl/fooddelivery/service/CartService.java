@@ -1,6 +1,7 @@
 package ru.nastyzl.fooddelivery.service;
 
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
+import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
@@ -8,7 +9,7 @@ import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 
 public interface CartService {
-    void removeProductFromCarts(Long dishId);
+    void removeDishFromCarts(Long dishId);
 
     VendorEntity getVendorByCartID(Long id) throws UserNotFoundException;
 
@@ -20,5 +21,5 @@ public interface CartService {
 
     CartEntity removeItemFromCart(DishShowDto dishShowDto, String username) throws UserNotFoundException;
 
-    void deleteCartById(Long id) throws UserNotFoundException;
+    void deleteCartById(Long id) throws CartNotFoundException;
 }

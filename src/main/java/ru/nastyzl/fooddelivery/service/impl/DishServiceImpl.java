@@ -137,7 +137,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public List<DishShowDto> getAllDish() {
-        List<DishEntity> dishEntityList = dishRepository.findAll();
+        List<DishEntity> dishEntityList = dishRepository.findAllActiveDishes();
         return dishEntityList.stream()
                 .map(this::dishEntityToDishShowDto)
                 .collect(Collectors.toList());

@@ -56,7 +56,7 @@ public class DishController {
     @Transactional
     public String deleteDish(@PathVariable("id") Long id) {
         if (!dishService.getById(id).isDeleted()) {
-            cartService.removeProductFromCarts(id);
+            cartService.removeDishFromCarts(id);
         }
         dishService.changeDeleteFlagById(id);
         return "redirect:/vendor/dishes";

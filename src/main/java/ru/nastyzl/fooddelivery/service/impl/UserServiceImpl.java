@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.AddressMapper;
 import ru.nastyzl.fooddelivery.mapper.UserMapper;
@@ -40,7 +42,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllVendor().stream().filter(vendor -> vendor.getUsername().equals(username)).findFirst().orElseThrow(() -> new UserNotFoundException("вендор не найден"));
     }
 
-
     @Override
     public CustomerEntity getCustomerByUsername(String username) throws UserNotFoundException {
         return userRepository.findAllCustomer().stream().filter(vendor -> vendor.getUsername().equals(username)).findFirst().orElseThrow(() -> new UserNotFoundException("пользователь не найден"));
@@ -51,8 +52,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllCourier().stream().filter(courier -> courier.getUsername().equals(username)).findFirst();
     }
 
+    /**
+     * Register new user depending on the role
+     *
+     * @param userDto user data transfer
+     * @return registration user
+     * @throws InvalidRoleException if an unknown role is passed
+     */
     @Override
-    public UserEntity registerUser(UserDto userDto) {
+    public UserEntity registerUser(UserDto userDto) throws InvalidRoleException {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         switch (userDto.getRole()) {
             case UserRole.Values.VENDOR:
@@ -65,10 +73,18 @@ public class UserServiceImpl implements UserService {
             case UserRole.Values.COURIER:
                 return userRepository.save(userMapper.userDtoToCourierEntity(userDto));
             default:
-                throw new RuntimeException("Invalid role");
+                throw new InvalidRoleException();
         }
     }
 
+    /**
+     * Activates courier by username and setting availability to 'false'
+     *
+     * @param username username of courier
+     * @param chatId ID of telegram chat
+     * @return 'true' if courier activated
+     *          'false' if this courier has already activated telegram bot
+     */
     @Override
     public boolean activateCourier(String username, Long chatId) {
         Optional<CourierEntity> user = this.getCourierByUsername(username);
@@ -92,6 +108,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Choose courier for order.
+     * First, free activated couriers are checked and, if available, selected randomly.
+     * If not found, then select a randomly busy activated courier.
+     *
+     * @return entity of chosen courier
+     * @throws UserNotFoundException if courier not found
+     */
+    @Override
     public CourierEntity chooseCourier() throws UserNotFoundException {
 
         List<CourierEntity> busyCouriers = userRepository.findAllCourier()
@@ -114,10 +139,8 @@ public class UserServiceImpl implements UserService {
 
     private CourierEntity getRandomCourier(List<CourierEntity> couriers) {
         Random random = new Random();
-        CourierEntity courierEntity = couriers.get(random.nextInt(couriers.size()));
-        return courierEntity;
+        return couriers.get(random.nextInt(couriers.size()));
     }
-
 
     @Override
     public List<DishEntity> getAllDishes(String username) {
