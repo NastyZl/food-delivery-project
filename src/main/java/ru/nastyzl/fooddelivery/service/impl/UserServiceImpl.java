@@ -3,6 +3,7 @@ package ru.nastyzl.fooddelivery.service.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.objects.Contact;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
@@ -15,10 +16,7 @@ import ru.nastyzl.fooddelivery.repository.AddressRepository;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.service.UserService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,34 +76,44 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Activates courier by username and setting availability to 'false'
+     * Activates courier by phone number
      *
-     * @param username username of courier
-     * @param chatId ID of telegram chat
-     * @return 'true' if courier activated
-     *          'false' if this courier has already activated telegram bot
+     * @param contact user's contact information from telegram
      */
     @Override
-    public boolean activateCourier(String username, Long chatId) {
-        Optional<CourierEntity> user = this.getCourierByUsername(username);
-        if (user.isPresent()) {
-            user.get().setChatId(chatId);
-            user.get().setAvailability(false);
-            userRepository.save(user.get());
-            return true;
+    public void activateCourier(Contact contact) {
+        Optional<CourierEntity> optionalUser = userRepository.findCourierByPhoneNumber(contact.getPhoneNumber());
+        if (optionalUser.isPresent()) {
+            CourierEntity user = optionalUser.get();
+            user.setChatId(contact.getUserId());
+            user.setAvailability(true);
+            userRepository.save(user);
         }
-        return false;
     }
 
     @Override
-    public Optional<CourierEntity> findByChatId(Long id) {
-        return userRepository.findByChatId(id);
+    public Optional<CourierEntity> findCourierByChatId(Long id) {
+        return userRepository.findCourierByChatId(id);
+    }
+
+    @Override
+    public Optional<CourierEntity> findCourierByPhoneNumber(String phone) {
+        return userRepository.findCourierByPhoneNumber(phone);
     }
 
     @Override
     @Transactional
     public Optional<? extends UserEntity> getByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public boolean checkAvailable(Long id) {
+        CourierEntity courierEntity = userRepository.findAllCourier().stream().filter(courier -> Objects.equals(courier.getId(), id)).findFirst().get();
+        if (courierEntity.getOrderEntityList().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -117,6 +125,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserNotFoundException if courier not found
      */
     @Override
+    @Transactional
     public CourierEntity chooseCourier() throws UserNotFoundException {
 
         List<CourierEntity> busyCouriers = userRepository.findAllCourier()
@@ -139,7 +148,9 @@ public class UserServiceImpl implements UserService {
 
     private CourierEntity getRandomCourier(List<CourierEntity> couriers) {
         Random random = new Random();
-        return couriers.get(random.nextInt(couriers.size()));
+        CourierEntity courierEntity = couriers.get(random.nextInt(couriers.size()));
+        courierEntity.setAvailability(false);
+        return courierEntity;
     }
 
     @Override

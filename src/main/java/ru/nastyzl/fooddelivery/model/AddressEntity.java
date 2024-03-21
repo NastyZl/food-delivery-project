@@ -36,16 +36,10 @@ public class AddressEntity {
 
     @Override
     public String toString() {
-        return "AddressEntity{" +
-                "id=" + id +
-                ", city='" + city + '\'' +
-                ", streetName='" + streetName + '\'' +
-                ", streetNumber='" + streetNumber + '\'' +
-                ", apartment='" + apartment + '\'' +
-                ", floor=" + floor +
-                ", entrance=" + entrance +
-                ", vendor=" + vendor +
-                '}';
+        return city + ", " + streetName + ",  "
+                + streetNumber + ", кв." + apartment +
+                ", этаж " + floor +
+                ", подъезд " + entrance;
     }
 
     public void addVendor(VendorEntity vendor) {
@@ -123,4 +117,5 @@ public class AddressEntity {
     public void setVendor(VendorEntity vendor) {
         this.vendor = vendor;
     }
+
 }

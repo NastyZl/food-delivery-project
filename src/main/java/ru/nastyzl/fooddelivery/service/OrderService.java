@@ -1,5 +1,6 @@
 package ru.nastyzl.fooddelivery.service;
 
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.exception.CartNotFoundException;

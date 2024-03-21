@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.nastyzl.fooddelivery.bot.impl.NotificationServiceImpl;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
 import ru.nastyzl.fooddelivery.enums.UserRole;
@@ -28,11 +29,13 @@ public class OrderController {
     private final UserService userService;
     private final OrderService orderService;
     private final CartService cartService;
+    private final NotificationServiceImpl notificationServiceImpl;
 
-    public OrderController(UserService userService, OrderService orderService, CartService cartService) {
+    public OrderController(UserService userService, OrderService orderService, CartService cartService, NotificationServiceImpl notificationServiceImpl) {
         this.userService = userService;
         this.orderService = orderService;
         this.cartService = cartService;
+        this.notificationServiceImpl = notificationServiceImpl;
     }
 
     @GetMapping("/check-out")
@@ -48,8 +51,9 @@ public class OrderController {
         orderDto.setPaymentType(paymentType);
         orderDto.setCart(cartService.getCart(principal.getName()));
         OrderEntity order = orderService.save(orderDto);
+        notificationServiceImpl.sendNotification(order);
         model.addAttribute("order", order);
-        return "redirect:order/my-orders";
+        return "redirect:/my-orders";
     }
 
     @GetMapping("/detail/{id}")

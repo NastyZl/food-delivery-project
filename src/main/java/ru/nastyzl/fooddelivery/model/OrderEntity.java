@@ -46,7 +46,7 @@ public class OrderEntity {
     @Column(name = "cust_address", nullable = false)
     private String customerAddress;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
 
@@ -137,4 +137,5 @@ public class OrderEntity {
     public void setDeliveryDate(LocalDateTime deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
 }

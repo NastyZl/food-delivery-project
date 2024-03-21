@@ -2,7 +2,6 @@ package ru.nastyzl.fooddelivery.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.nastyzl.fooddelivery.bot.TelegramBotService;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
@@ -28,14 +27,12 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
     private final OrderRepository orderRepository;
-    private final TelegramBotService telegramBotService;
-
-    public OrderServiceImpl(UserService userService, OrderItemRepository orderItemRepository, CartService cartService, OrderRepository orderRepository, TelegramBotService telegramBotService) {
+    public OrderServiceImpl(UserService userService, OrderItemRepository orderItemRepository, CartService cartService, OrderRepository orderRepository) {
         this.userService = userService;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
         this.orderRepository = orderRepository;
-        this.telegramBotService = telegramBotService;
+
     }
 
     /**
@@ -56,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPaymentType(orderDto.getPaymentType());
 
         CourierEntity courierEntity = userService.chooseCourier();
+        courierEntity.addOrderEntity(order);
         order.setCourier(courierEntity);
 
         order.setCustomerAddress(orderDto.getAddress());
@@ -78,20 +76,31 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity save = orderRepository.save(order);
 
-        telegramBotService.sendMessageNewOrder(courierEntity.getChatId(), save);
-
         return save;
     }
 
     @Override
+    @Transactional
     public void updateStatusOrder(OrderStatus status, Long orderId) throws OrderNotFoundException {
         Optional<OrderEntity> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             OrderEntity order = optionalOrder.get();
             order.setOrderStatus(status);
-            if (status.equals(OrderStatus.DONE)) {
-                order.setDeliveryDate(LocalDateTime.now());
+            if (status.equals(OrderStatus.DELIVERED)) {
+                order.setOrderStatus(status);
             }
+            else if (status.equals(OrderStatus.DONE)) {
+                order.setOrderStatus(status);
+                order.setDeliveryDate(LocalDateTime.now());
+                CourierEntity courier = order.getCourier();
+                courier.deleteOrderEntity(orderId);
+                if (userService.checkAvailable(courier.getId())) {
+                    courier.setAvailability(true);
+                }
+            } else {
+                throw new OrderNotFoundException("неизвесный статус");
+            }
+            orderRepository.save(order);
         } else throw new OrderNotFoundException("Ошибка при смене статуса заказа");
     }
 

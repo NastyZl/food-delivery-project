@@ -46,7 +46,7 @@ public class SecurityConfig {
                                 .antMatchers("/vendor/").hasRole("VENDOR")
                                 .antMatchers("/cart/**").hasRole("CUSTOMER")
                                 .antMatchers("/resource/**", "/images/**", "/assets/img/**").permitAll()
-                                .antMatchers("/auth/login", "/404", "/auth/registration", "/api/**", "/menu").permitAll()
+                                .antMatchers("/auth/login", "/404", "/auth/registration", "/tg/**", "/menu").permitAll()
                                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")

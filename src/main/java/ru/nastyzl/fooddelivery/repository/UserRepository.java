@@ -23,8 +23,10 @@ public interface UserRepository<T extends UserEntity> extends JpaRepository<T, L
     @Query("from CourierEntity")
     List<CourierEntity> findAllCourier();
     @Query("from CourierEntity c where c.chatId=:chatId")
-    Optional<CourierEntity> findByChatId(@Param("chatId") Long chatId);
+    Optional<CourierEntity> findCourierByChatId(@Param("chatId") Long chatId);
 
+    @Query("from CourierEntity c where c.phone=:phone")
+    Optional<CourierEntity> findCourierByPhoneNumber(@Param("phone") String phone);
     Optional<? extends UserEntity> findByUsername(String username);
 
 }

@@ -2,10 +2,9 @@ package ru.nastyzl.fooddelivery.model;
 
 import ru.nastyzl.fooddelivery.enums.UserRole;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue(value = UserRole.Values.COURIER)
@@ -14,12 +13,27 @@ public class CourierEntity extends UserEntity {
     private final UserRole role = UserRole.COURIER;
     private Boolean availability;
 
+    @OneToMany
+    private List<OrderEntity> orderEntityList = new ArrayList<>();
+
+    public List<OrderEntity> getOrderEntityList() {
+        return orderEntityList;
+    }
+
+    public void addOrderEntity(OrderEntity order) {
+        this.orderEntityList.add(order);
+    }
+
+    public void deleteOrderEntity(Long id) {
+        this.orderEntityList.removeIf(order -> order.getId().equals(id));
+    }
+
     @Column(name = "chat_id")
     private Long chatId;
 
     public boolean isAvailable() {
-        if (availability!=null)
-        return availability;
+        if (availability != null)
+            return availability;
         else return false;
     }
 
