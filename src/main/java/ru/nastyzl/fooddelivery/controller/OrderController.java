@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.nastyzl.fooddelivery.bot.impl.NotificationServiceImpl;
+import ru.nastyzl.fooddelivery.bot.service.impl.NotificationServiceImpl;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
 import ru.nastyzl.fooddelivery.enums.UserRole;

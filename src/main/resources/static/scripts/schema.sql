@@ -47,9 +47,7 @@ create table dishes
         primary key,
     current_price double precision not null,
     description   varchar(255),
-    dishname      varchar(255)     not null
-        constraint uk_dishname
-            unique,
+    dishname      varchar(255)     not null,
     img_path      varchar(255)     not null,
     quantity      integer          not null,
     vendor_id     bigint

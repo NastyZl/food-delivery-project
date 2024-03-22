@@ -1,5 +1,5 @@
 package ru.nastyzl.fooddelivery.mapper;
-
+;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import ru.nastyzl.fooddelivery.dto.VendorDto;
@@ -20,7 +20,7 @@ public class DishMapperUnitTest {
 
         VendorEntity vendorEntity = mapper.vendorDtoToVendorEntity(vendorDto);
 
-        assertEquals(vendorDto.getId(),vendorEntity.getId());
+        assertEquals(vendorDto.getId(), vendorEntity.getId());
         assertEquals(vendorDto.getUsername(), vendorEntity.getUsername());
     }
 }

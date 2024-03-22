@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.bot;
+package ru.nastyzl.fooddelivery.bot.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;

@@ -3,6 +3,7 @@ package ru.nastyzl.fooddelivery.model;
 import ru.nastyzl.fooddelivery.enums.UserRole;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ public class VendorEntity extends UserEntity {
     private AddressEntity address;
 
     @OneToMany(mappedBy = "vendorEntity", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<DishEntity> dishes;
+    private List<DishEntity> dishes = new ArrayList<>();
 
     @Override
     public UserRole getRole() {

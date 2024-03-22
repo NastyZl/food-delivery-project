@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.bot.impl;
+package ru.nastyzl.fooddelivery.bot.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.nastyzl.fooddelivery.bot.ContainerMessage;
-import ru.nastyzl.fooddelivery.bot.NotificationService;
+import ru.nastyzl.fooddelivery.bot.service.NotificationService;
 import ru.nastyzl.fooddelivery.bot.TelegramBot;
 import ru.nastyzl.fooddelivery.model.OrderEntity;
 import ru.nastyzl.fooddelivery.model.OrderItemEntity;

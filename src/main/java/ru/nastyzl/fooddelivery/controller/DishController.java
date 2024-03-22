@@ -39,6 +39,9 @@ public class DishController {
 
     @PostMapping("/save")
     public String saveDish(@Valid @ModelAttribute("dishCreateDto") DishCreateDto dishCreateDto, BindingResult bindingResult, @RequestParam("image") MultipartFile multipartFile, Principal principal) throws IOException, UserNotFoundException {
+        if (bindingResult.hasErrors()) {
+            return "dish/dish-form";
+        }
         if (multipartFile.isEmpty()) {
             bindingResult.addError(new FieldError("dishCreateDto", "imgPath", "Необходимо добавить фотографию блюда."));
         } else {
@@ -46,11 +49,7 @@ public class DishController {
             dishCreateDto.setImgPath(fileName);
             DishEntity saveDish = dishService.save(dishCreateDto, principal.getName());
             String upload = "src/main/resources/static/assets/img/" + saveDish.getVendorEntity().getId();
-
             FileUploadUtil.saveFile(upload, fileName, multipartFile);
-        }
-        if (bindingResult.hasErrors()) {
-            return "dish/dish-form";
         }
         return "redirect:/vendor/dishes";
     }

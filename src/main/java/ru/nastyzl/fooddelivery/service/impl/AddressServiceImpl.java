@@ -7,6 +7,9 @@ import ru.nastyzl.fooddelivery.model.VendorEntity;
 import ru.nastyzl.fooddelivery.repository.AddressRepository;
 import ru.nastyzl.fooddelivery.service.AddressService;
 
+/**
+ * Implementation of the AddressService interface
+ */
 @Service
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
@@ -17,6 +20,12 @@ public class AddressServiceImpl implements AddressService {
         this.addressMapper = addressMapper;
     }
 
+    /**
+     * Save address with vendor.
+     * @param addressEntity address to be saved.
+     * @param vendorEntity vendor associated with address.
+     * @return saved address.
+     */
     @Override
     public AddressEntity save(AddressEntity addressEntity, VendorEntity vendorEntity) {
         addressEntity.addVendor(vendorEntity);

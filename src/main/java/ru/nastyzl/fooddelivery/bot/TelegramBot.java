@@ -17,8 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.nastyzl.fooddelivery.bot.service.TelegramRegistrationService;
+import ru.nastyzl.fooddelivery.bot.service.impl.UpdateStatusService;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
-import ru.nastyzl.fooddelivery.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.nastyzl.fooddelivery.bot;
+package ru.nastyzl.fooddelivery.bot.service;
 
 import ru.nastyzl.fooddelivery.model.OrderEntity;
 

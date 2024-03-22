@@ -55,11 +55,12 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * Delete dish by ID.
-     * Set 'deleted' flag on true.
+     * Change delete flag of a dish by its ID. If the dish is not deleted, sets its quantity to 0.
+     * If the dish's quantity is 0 and the delete flag is being set to false, throws an exception.
      * Delete all cart items associated with dish.
      *
-     * @param id ID of dish deleted.
+     * @param id ID of dish.
+     * @throws NullQuantityOfDishesException if the dish quantity is 0, and you are trying to activate the dish.
      */
     @Override
     @Transactional
@@ -69,7 +70,7 @@ public class DishServiceImpl implements DishService {
             DishEntity dish = optionalDish.get();
             if (!dish.isDeleted()) {
                 dish.setQuantity(0);
-            } else if (dish.getQuantity()==0) {
+            } else if (dish.getQuantity() == 0) {
                 throw new NullQuantityOfDishesException("Для того, чтобы восстановить блюдо в продажу, нужно сначала пополнить запасы.");
             }
             dish.setDeleted(!dish.isDeleted());
@@ -146,22 +147,6 @@ public class DishServiceImpl implements DishService {
     public List<DishShowDto> getAllDishesForVendor(Long vendorId) {
         return dishRepository.findDishesByVendorId(vendorId).stream()
                 .map(this::dishEntityToDishShowDto).collect(Collectors.toList());
-    }
-
-    /**
-     * Enables a dish by ID.
-     * Set 'deleted' flag on false.
-     *
-     * @param id dish ID.
-     * @throws DishNotFoundException if the dish with the specified ID is not found.
-     */
-    public void enableById(Long id) throws DishNotFoundException {
-        Optional<DishEntity> optionalDish = dishRepository.findById(id);
-        if (optionalDish.isPresent()) {
-            DishEntity dish = optionalDish.get();
-            dish.setDeleted(false);
-            dishRepository.save(dish);
-        } else throw new DishNotFoundException();
     }
 
     @Override

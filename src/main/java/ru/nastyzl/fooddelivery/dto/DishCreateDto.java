@@ -3,7 +3,7 @@ package ru.nastyzl.fooddelivery.dto;
 import javax.validation.constraints.*;
 
 public class DishCreateDto {
-    @NotBlank(message = "Необходимо указать имя")
+    @NotBlank(message = "Необходимо указать название")
     private String dishName;
     @NotNull(message = "Необходимо указать цену")
     @Positive(message = "Цена должна быть положительна")
