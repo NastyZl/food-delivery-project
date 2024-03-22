@@ -4,10 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
-import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
-import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
-import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
-import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
+import ru.nastyzl.fooddelivery.exception.*;
 import ru.nastyzl.fooddelivery.model.*;
 import ru.nastyzl.fooddelivery.repository.CartItemRepository;
 import ru.nastyzl.fooddelivery.repository.CartRepository;
@@ -77,17 +74,40 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartEntity updateCart(DishShowDto dishShowDto, Integer quantity, String username) throws UserNotFoundException {
+    public CartEntity updateCart(Long dishId, Integer quantity, String username) throws UserNotFoundException, MaxQuantityExceededException, DishNotFoundException {
         Optional<? extends UserEntity> userOptional = userService.getByUsername(username);
         if (userOptional.isPresent()) {
             CustomerEntity customer = (CustomerEntity) userOptional.get();
             CartEntity cart = customer.getCart();
             Set<CartItemEntity> cartItemSet = cart.getCartItems();
-            CartItemEntity item = find(cartItemSet, dishShowDto.getId());
-            item.setQuantity(quantity);
-            cart.setTotalPrise(totalPrice(cart.getCartItems()));
-            cart.setTotalItems(totalItem(cart.getCartItems()));
-            return cartRepository.save(cart);
+
+            Optional<DishEntity> optionalDish = dishService.findById(dishId);
+            if (optionalDish.isPresent()) {
+
+                DishEntity dish = optionalDish.get();
+                Integer maxQuantity = dish.getQuantity();
+
+                CartItemEntity item = find(cartItemSet, dishId);
+
+                if (quantity > maxQuantity) {
+
+                    throw new MaxQuantityExceededException("Запрошенное количество товара " + dish.getDishName() + " отсутствует." + "\n" +
+                            " Пожалуйста, выберите количество меньше максимально допустимого ( " + maxQuantity + " )");
+                }
+                if (quantity.equals(maxQuantity)) {
+                    dish.setQuantity(0);
+                    dish.setDeleted(true);
+                } else {
+                    dish.setQuantity(maxQuantity - quantity + item.getQuantity());
+                }
+
+                item.setQuantity(quantity);
+                cart.setTotalPrise(totalPrice(cart.getCartItems()));
+                cart.setTotalItems(totalItem(cart.getCartItems()));
+
+                return cartRepository.save(cart);
+
+            } else throw new DishNotFoundException("Блюдо не найдено.");
         } else {
             throw new UserNotFoundException("update cart");
         }
@@ -103,18 +123,31 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     @Transactional
-    public CartEntity removeItemFromCart(DishShowDto dishDto, String username) throws UserNotFoundException {
+    public CartEntity removeItemFromCart(DishShowDto dishDto, String username) throws UserNotFoundException, DishNotFoundException {
         Optional<? extends UserEntity> userOptional = userService.getByUsername(username);
         if (userOptional.isPresent()) {
             CustomerEntity customer = (CustomerEntity) userOptional.get();
             CartEntity cart = customer.getCart();
             Set<CartItemEntity> cartItemSet = cart.getCartItems();
-            CartItemEntity item = find(cartItemSet, dishDto.getId());
-            cartItemSet.remove(item);
-            cartItemRepository.delete(item);
-            cart.setTotalPrise(totalPrice(cart.getCartItems()));
-            cart.setTotalItems(totalItem(cart.getCartItems()));
-            return cartRepository.save(cart);
+
+            Optional<DishEntity> optionalDish = dishService.findById(dishDto.getId());
+            if (optionalDish.isPresent()) {
+
+                DishEntity dish = optionalDish.get();
+                Integer dishQuantity = dish.getQuantity();
+
+                CartItemEntity item = find(cartItemSet, dishDto.getId());
+                cartItemSet.remove(item);
+
+                dish.setQuantity(dishQuantity + item.getQuantity());
+
+                cartItemRepository.delete(item);
+
+                cart.setTotalPrise(totalPrice(cart.getCartItems()));
+                cart.setTotalItems(totalItem(cart.getCartItems()));
+
+                return cartRepository.save(cart);
+            } else throw new DishNotFoundException("Блюдо не найдено!");
         } else {
             throw new UserNotFoundException("update cart");
         }

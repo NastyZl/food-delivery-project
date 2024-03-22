@@ -14,6 +14,7 @@ import java.util.Optional;
 
 public interface DishRepository extends JpaRepository<DishEntity, Long> {
     Optional<DishEntity> findByDishName(String dishName);
+
     @Query("select  d from DishEntity d where  d.isDeleted=false")
     Page<DishEntity> pageDishes(Pageable pageable);
 

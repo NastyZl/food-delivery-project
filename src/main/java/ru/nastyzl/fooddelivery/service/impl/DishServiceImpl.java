@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.NullQuantityOfDishesException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.DishMapper;
 import ru.nastyzl.fooddelivery.mapper.VendorMapper;
@@ -33,6 +34,7 @@ public class DishServiceImpl implements DishService {
         this.userService = userService;
         this.dishMapper = dishMapper;
     }
+
 
     @Override
     public Optional<DishEntity> getByDishName(String dishName) {
@@ -61,10 +63,15 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     @Transactional
-    public void changeDeleteFlagById(Long id) {
+    public void changeDeleteFlagById(Long id) throws NullQuantityOfDishesException {
         Optional<DishEntity> optionalDish = dishRepository.findById(id);
         if (optionalDish.isPresent()) {
             DishEntity dish = optionalDish.get();
+            if (!dish.isDeleted()) {
+                dish.setQuantity(0);
+            } else if (dish.getQuantity()==0) {
+                throw new NullQuantityOfDishesException("Для того, чтобы восстановить блюдо в продажу, нужно сначала пополнить запасы.");
+            }
             dish.setDeleted(!dish.isDeleted());
             dishRepository.save(dish);
         }
@@ -75,6 +82,11 @@ public class DishServiceImpl implements DishService {
         Pageable pageable = PageRequest.of(pageNo, 10);
         Page<DishEntity> dishEntityPage = dishRepository.pageDishes(pageable);
         return dishEntityPage.map(this::dishEntityToDishShowDto);
+    }
+
+    @Override
+    public Optional<DishEntity> findById(Long id) {
+        return dishRepository.findById(id);
     }
 
     @Override

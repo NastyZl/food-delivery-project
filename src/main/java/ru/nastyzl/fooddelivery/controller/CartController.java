@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.MaxQuantityExceededException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.CustomerEntity;
@@ -18,7 +19,6 @@ import ru.nastyzl.fooddelivery.service.DishService;
 import ru.nastyzl.fooddelivery.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
 @Controller
@@ -42,10 +42,17 @@ public class CartController {
     public String showCart(Model model, Principal principal) throws UserNotFoundException {
         CustomerEntity user = userService.getCustomerByUsername(principal.getName());
         CartEntity cart = user.getCart();
-        if (cart == null) {
-            model.addAttribute("check", "Корзина пустая");
+        if (cart == null || cart.getCartItems().isEmpty()) {
+            model.addAttribute("check", "Ваша корзина пустая");
         } else {
             model.addAttribute("grandTotal", cart.getTotalPrise());
+        }
+        Object maxQuantityErrorMessage = model.getAttribute("maxQuantityErrorMessage");
+
+        if (maxQuantityErrorMessage == null) {
+            model.addAttribute("maxQuantityErrorMessage", "");
+        } else {
+            model.addAttribute(maxQuantityErrorMessage);
         }
 
         model.addAttribute("cart", cart);
@@ -69,8 +76,8 @@ public class CartController {
     public String updateCart(@RequestParam("id") Long id,
                              @RequestParam("quantity") Integer quantity,
                              Model model,
-                             Principal principal) throws UserNotFoundException {
-        CartEntity cart = cartService.updateCart(dishService.getById(id), quantity, principal.getName());
+                             Principal principal) throws UserNotFoundException, MaxQuantityExceededException, DishNotFoundException {
+        CartEntity cart = cartService.updateCart(id, quantity, principal.getName());
         model.addAttribute("cart", cart);
         return "redirect:/cart/";
     }
@@ -78,14 +85,11 @@ public class CartController {
     @PostMapping(value = "/update-cart", params = "action=delete")
     public String deleteItem(@RequestParam("id") Long id,
                              Model model,
-                             Principal principal) throws UserNotFoundException {
-        if (principal == null) {
-            return "redirect:/login";
-        } else {
-            CartEntity shoppingCart = cartService.removeItemFromCart(dishService.getById(id), principal.getName());
-            model.addAttribute("shoppingCart", shoppingCart);
-            return "redirect:/cart/";
-        }
+                             Principal principal) throws UserNotFoundException, DishNotFoundException {
+
+        CartEntity shoppingCart = cartService.removeItemFromCart(dishService.getById(id), principal.getName());
+        model.addAttribute("shoppingCart", shoppingCart);
+        return "redirect:/cart/";
     }
 
 }

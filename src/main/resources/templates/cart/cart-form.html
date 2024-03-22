@@ -19,11 +19,16 @@
             <div class="col-lg-12">
                 <div class="table-main table-responsive">
 
-                    <p class="text-center" th:if="${check}" th:text="${check}">
-                        <i class="text-info font-weight-bold text-center"></i>
-                        You don't have any items in your cart</p>
+                    <div class="container" th:if="${check}">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <p th:text="${check}"></p>
+                                <a th:href="@{/menu/{pageNo} (pageNo=0)}" class="btn btn-primary">Назад к меню</a>
+                            </div>
+                        </div>
+                    </div>
 
-                    <table class="table" th:if="${grandTotal}">
+                    <table class="table table-sm" th:if="${grandTotal}">
                         <thead>
                         <tr>
                             <th>Фото</th>
@@ -40,15 +45,17 @@
                             <td class="thumbnail-img">
                                 <a href="#">
                                     <img class="img-fluid"
-                                         th:src="'../assets/img/' + ${cartItem.dish.vendorEntity.id}+ '/'+${cartItem.dish.imgPath}" alt=""/>
+                                         th:src="'../assets/img/' + ${cartItem.dish.vendorEntity.id}+ '/'+${cartItem.dish.imgPath}"
+                                         alt=""
+                                         height="150px"/>
                                 </a>
                             </td>
 
-                            <td class="name-pr">
+                            <td>
                                 <p th:text="${cartItem.dish.dishName}"></p>
                             </td>
 
-                            <td class="price-pr">
+                            <td>
                                 <p th:text="'$' + ${cartItem.unitPrice}"></p>
                             </td>
 
@@ -57,7 +64,7 @@
 
                                 <td class="quantity-box">
                                     <input type="number" name="quantity" th:value="${cartItem.quantity}" size="4"
-                                           value="1" min="0" step="1"
+                                           value="1" min="1" step="1"
                                            class="c-input-text qty text">
                                 </td>
 
@@ -67,11 +74,11 @@
 
                                 <td>
                                     <button type="submit" name="action" value="update" title="Update"
-                                            class="btn btn-primary">
+                                            class="btn btn-outline-success">
                                         Изменить
                                     </button>
-                                    <button type="submit" name="action" value="delete" title="Update"
-                                            class="btn btn-danger">
+                                    <button type="submit" name="action" value="delete" title="Delete"
+                                            class="btn btn-outline-danger">
                                         Удалить
                                     </button>
                                 </td>
@@ -101,8 +108,8 @@
                 </div>
             </div>
             <div class="col-12 d-flex shopping-box">
-<!--                href="order/check-out.html"-->
-                <a  th:href="@{/order/check-out}" class="ml-auto btn hvr-hover">Оформить</a>
+                <!--                href="order/check-out.html"-->
+                <a th:href="@{/order/check-out}" class="btn btn-dark">Оформить</a>
             </div>
         </div>
     </div>
@@ -113,5 +120,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let errorMsg = [[${maxQuantityErrorMessage}]];
+    if (errorMsg.length > 0) {
+        alert(errorMsg);
+    }
+    /*]]>*/
+</script>
 </body>
+
 </html>

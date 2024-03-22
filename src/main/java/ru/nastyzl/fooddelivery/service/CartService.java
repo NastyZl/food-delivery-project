@@ -1,10 +1,7 @@
 package ru.nastyzl.fooddelivery.service;
 
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
-import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
-import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
-import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
-import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
+import ru.nastyzl.fooddelivery.exception.*;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 
@@ -17,9 +14,9 @@ public interface CartService {
 
     CartEntity addItemToCart(DishShowDto dishShowDto, Integer quantity, String username) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException;
 
-    CartEntity updateCart(DishShowDto dishShowDto, Integer quantity, String username) throws UserNotFoundException;
+    CartEntity updateCart(Long dishId, Integer quantity, String username) throws UserNotFoundException, MaxQuantityExceededException, DishNotFoundException;
 
-    CartEntity removeItemFromCart(DishShowDto dishShowDto, String username) throws UserNotFoundException;
+    CartEntity removeItemFromCart(DishShowDto dishShowDto, String username) throws UserNotFoundException, DishNotFoundException;
 
     void deleteCartById(Long id) throws CartNotFoundException;
 }

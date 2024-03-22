@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
+import ru.nastyzl.fooddelivery.exception.NullQuantityOfDishesException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 import ru.nastyzl.fooddelivery.service.CartService;
@@ -56,7 +57,7 @@ public class DishController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public String deleteDish(@PathVariable("id") Long id) {
+    public String deleteDish(@PathVariable("id") Long id) throws NullQuantityOfDishesException {
         if (!dishService.getById(id).isDeleted()) {
             cartService.removeDishFromCarts(id);
         }
