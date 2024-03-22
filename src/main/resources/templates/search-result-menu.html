@@ -10,12 +10,7 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Меню</title>
-    <style>
-        .card-img-top img {
-            max-width: 310px;
-            max-height: 40px;
-        }
-    </style>
+
 </head>
 <body>
 <header>
@@ -30,7 +25,7 @@
         <div class="col-md-4 mt-5">
             <form th:action="@{/menu/search-result/0}" th:method="get">
                 <div class="input-group">
-                    <input class="form-control py-2 rounded-pill mr-1 pr-5" type="search" value="поиск..." name="keyword"
+                    <input class="form-control py-2 rounded-pill mr-1 pr-5" type="search" th:value="${keyword}" name="keyword"
                            id="example-search-input">
                     <span class="input-group-append">
                     <button class="btn rounded-pill border-0 ml-n5" type="button">
@@ -42,14 +37,17 @@
         </div>
     </div>
 
+    <p th:if="${dishes.isEmpty()}">Ничего не найдено</p>
+
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <p class="text-center" th:if="${errorMessage}" th:text="${errorMessage}">
             <i class="text-info font-weight-bold text-center"></i>
             You don't have any items in your cart</p>
         <div class="col" th:each="dish : ${dishes}">
-            <form th:action="@{/cart/add-to-cart}" method="post">
+            <form th:action="@{cart/add-to-cart}" method="post">
                 <div class="card">
-                    <img th:src="'/assets/img/' + ${dish.vendor.id} + '/'+${dish.imgPath}" class="card-img-top" alt="Image" height="30%">
+                    <img th:src="'/assets/img/' + ${dish.vendor.id} + '/'+${dish.imgPath}" class="img-fluid"
+                         alt="Image">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${dish.dishName}">Заголовок карточки</h5>
                         <p class="card-text" th:text="${dish.description}"></p>
@@ -70,16 +68,17 @@
 
         <nav aria-label="Page navigation example">
             <ul class="pagination">
-                <li th:if="${currentPage!=0}" class="page-item">
-                    <a th:href="@{'/menu/' + ${currentPage -1}}" class="page-link" >Previous</a>
+                <li th:if="${currentPage != 0}" class="page-item">
+                    <a th:href="@{'/menu/search-result/' + ${currentPage - 1} +'?keyword=' + ${keyword}}" class="page-link">Previous</a>
                 </li>
-                <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                    <a th:href="@{'/menu/' + ${i -1}}" class="page-link" >
+                <li th:if="${totalPages != 0}"  th:each="i: ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
+                    <a th:href="@{'/menu/search-result/' + ${i - 1} +'?keyword=' + ${keyword}}" class="page-link">
                         <span th:text="${i}"></span>
                     </a>
                 </li>
-                <li th:if="${currentPage +1 != totalPages}" class="page-item">
-                    <a th:href="@{'/menu/' + ${currentPage+1}}" class="page-link" href="#">Next</a>
+                <li th:if="${currentPage + 1 < totalPages}" class="page-item">
+                    <a th:href="@{'/menu/search-result/' + ${currentPage + 1}+'?keyword=' + ${keyword}}" class="page-link" href="#">Next</a>
                 </li>
             </ul>
         </nav>

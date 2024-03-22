@@ -54,6 +54,7 @@ public class CartServiceImpl implements CartService {
 
         DishEntity dish = dishService.dishShowDtoToDishEntity(dishDto);
 
+
         if (cartItem == null) {
             cartItem = new CartItemEntity();
             cartItem.setDish(dish);

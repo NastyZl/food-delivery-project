@@ -13,7 +13,7 @@ public class CourierEntity extends UserEntity {
     private final UserRole role = UserRole.COURIER;
     private Boolean availability;
 
-    @OneToMany
+    @OneToMany(mappedBy = "courier")
     private List<OrderEntity> orderEntityList = new ArrayList<>();
 
     public List<OrderEntity> getOrderEntityList() {

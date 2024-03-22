@@ -29,14 +29,11 @@ import java.util.TimerTask;
 public class TelegramBot extends TelegramLongPollingBot {
     Logger logger = LoggerFactory.getLogger(TelegramBot.class);
     private final ContainerMessage containerMessage;
-    private final UserService userService;
     private final UpdateStatusService updateStatusService;
     private final TelegramRegistrationService telegramRegistrationService;
     private static final String DELIVERED_BUTTON = "Заказ у меня";
 
     private static final String DONE_BUTTON = "Завершить заказ";
-    private static final String REGISTRATION_BUTTON = "Зарегистрироваться";
-
 
     private static final String HELP_TEXT = "Здесь будет справочная информация для вас! Позже...";
 
@@ -44,10 +41,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.name}")
     private String name;
 
-    public TelegramBot(@Value("${bot.token}") String token, ContainerMessage containerMessage, UserService userService, UpdateStatusService updateStatusService, TelegramRegistrationService telegramRegistrationService) {
+    public TelegramBot(@Value("${bot.token}") String token, ContainerMessage containerMessage, UpdateStatusService updateStatusService, TelegramRegistrationService telegramRegistrationService) {
         super(token);
         this.containerMessage = containerMessage;
-        this.userService = userService;
         this.updateStatusService = updateStatusService;
         this.telegramRegistrationService = telegramRegistrationService;
         List<BotCommand> listOfCommands = new ArrayList<>();

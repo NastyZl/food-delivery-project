@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -40,7 +41,7 @@ public class TelegramRegistrationServiceImpl implements TelegramRegistrationServ
     }
 
     private SendMessage handleRegisterIfExist(Message message) {
-        boolean isRegister = userService.findCourierByPhoneNumber(message.getContact().getPhoneNumber()).isPresent();
+        boolean isRegister = userService.findCourierByPhoneNumber(getPhoneNumber(message.getContact())).isPresent();
         if (isRegister) {
             return handleRegister(message);
         }
@@ -50,8 +51,17 @@ public class TelegramRegistrationServiceImpl implements TelegramRegistrationServ
                 .build();
     }
 
+
+    private String getPhoneNumber(Contact contact) {
+        var phoneNumber = contact.getPhoneNumber();
+        if (!phoneNumber.startsWith("+"))
+            return "+7" + phoneNumber.substring(1);
+        return phoneNumber;
+    }
+
     private SendMessage handleRegister(Message message) {
-        userService.activateCourier(message.getContact());
+        message.getContact().setPhoneNumber( getPhoneNumber(message.getContact()));
+        userService.activateCourier((message.getContact()));
         return registerSuccessMessage(message);
     }
 

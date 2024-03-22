@@ -26,6 +26,7 @@ import java.security.Principal;
 public class CartController {
 
     private final CartService cartService;
+
     private final DishService dishService;
 
     private final UserService userService;
@@ -38,10 +39,7 @@ public class CartController {
 
     @GetMapping("/")
     @Transactional
-    public String addToCart(Model model, Principal principal, HttpSession session) throws UserNotFoundException {
-        if (principal == null) {
-            return "redirect:auth/login";
-        }
+    public String showCart(Model model, Principal principal) throws UserNotFoundException {
         CustomerEntity user = userService.getCustomerByUsername(principal.getName());
         CartEntity cart = user.getCart();
         if (cart == null) {
@@ -61,10 +59,8 @@ public class CartController {
                                 @RequestParam(value = "quantity", required = false, defaultValue = "1") int quantity,
                                 HttpServletRequest request,
                                 Model model,
-                                Principal principal,
-                                HttpSession session) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
+                                Principal principal) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
         CartEntity cart = cartService.addItemToCart(dishService.getById(id), quantity, principal.getName());
-        //  session.setAttribute("totalItems", cart.getTotalItems());
         model.addAttribute("cart", cart);
         return "redirect:" + request.getHeader("Referer");
     }
@@ -74,9 +70,6 @@ public class CartController {
                              @RequestParam("quantity") Integer quantity,
                              Model model,
                              Principal principal) throws UserNotFoundException {
-        if (principal == null) {
-            return "redirect:/login";
-        }
         CartEntity cart = cartService.updateCart(dishService.getById(id), quantity, principal.getName());
         model.addAttribute("cart", cart);
         return "redirect:/cart/";
@@ -85,9 +78,7 @@ public class CartController {
     @PostMapping(value = "/update-cart", params = "action=delete")
     public String deleteItem(@RequestParam("id") Long id,
                              Model model,
-                             Principal principal,
-                             HttpSession session
-    ) throws UserNotFoundException {
+                             Principal principal) throws UserNotFoundException {
         if (principal == null) {
             return "redirect:/login";
         } else {

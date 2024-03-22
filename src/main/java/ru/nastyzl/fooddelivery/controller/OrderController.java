@@ -41,7 +41,7 @@ public class OrderController {
     @GetMapping("/check-out")
     public String checkOut(Principal principal, @ModelAttribute("order") OrderDto orderDto) throws UserNotFoundException {
         orderDto.setCart(cartService.getCart(principal.getName()));
-        return "order/check-out";
+        return "/order/check-out";
     }
 
     @PostMapping("/create-order")
@@ -53,7 +53,7 @@ public class OrderController {
         OrderEntity order = orderService.save(orderDto);
         notificationServiceImpl.sendNotification(order);
         model.addAttribute("order", order);
-        return "redirect:/my-orders";
+        return "redirect:/order/my-orders";
     }
 
     @GetMapping("/detail/{id}")
@@ -83,7 +83,7 @@ public class OrderController {
                 model.addAttribute("orders", orders);
             } else throw new UserNotFoundException("Нет доступа к заказам");
         }
-        return "order/my-orders";
+        return "/order/my-orders";
     }
 
 }

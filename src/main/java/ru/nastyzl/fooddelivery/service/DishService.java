@@ -1,5 +1,6 @@
 package ru.nastyzl.fooddelivery.service;
 
+import org.springframework.data.domain.Page;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
@@ -23,8 +24,11 @@ public interface DishService {
     DishEntity update(DishCreateDto dishCreateDto);
 
     void changeDeleteFlagById(Long id);
+    Page<DishShowDto> pageDishes(int pageNo);
 
     List<DishCreateDto> findAll();
+
+    Page<DishShowDto> searchDishes(String keyword, int pageNo);
 
     Long getVendorIdByDishId(Long id) throws DishNotFoundException;
 

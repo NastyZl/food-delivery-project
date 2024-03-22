@@ -1,5 +1,8 @@
 package ru.nastyzl.fooddelivery.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
@@ -68,10 +71,24 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    public Page<DishShowDto> pageDishes(int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        Page<DishEntity> dishEntityPage = dishRepository.pageDishes(pageable);
+        return dishEntityPage.map(this::dishEntityToDishShowDto);
+    }
+
+    @Override
     public List<DishCreateDto> findAll() {
         return dishRepository.findAll().stream()
                 .map(dishMapper::dishEntityToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<DishShowDto> searchDishes(String keyword, int pageNo) {
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        Page<DishEntity> dishes = dishRepository.searchDishes(keyword, pageable);
+        return dishes.map(this::dishEntityToDishShowDto);
     }
 
     /**
