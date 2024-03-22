@@ -42,11 +42,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .antMatchers("/admin/").hasRole("ADMIN")
-                                .antMatchers("/vendor/").hasRole("VENDOR")
+                                .antMatchers("/admin/**").hasRole("ADMIN")
+                                .antMatchers("/vendor/**").hasRole("VENDOR")
                                 .antMatchers("/cart/**").hasRole("CUSTOMER")
                                 .antMatchers("/resource/**", "/images/**", "/assets/img/**").permitAll()
-                                .antMatchers("/auth/login", "/404", "/auth/registration", "/tg/**", "/menu/**").permitAll()
+                                .antMatchers("/auth/login", "/404", "/auth/registration", "/menu/**").permitAll()
                                 .anyRequest().hasAnyRole("ADMIN", "CUSTOMER", "COURIER", "VENDOR"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
