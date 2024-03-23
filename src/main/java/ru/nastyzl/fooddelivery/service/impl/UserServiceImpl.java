@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
-import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.AddressMapper;
@@ -16,6 +15,7 @@ import ru.nastyzl.fooddelivery.repository.AddressRepository;
 import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.service.UserService;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -91,6 +91,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(userMapper::userEntityToUserDto).collect(Collectors.toList());
+    }
 
 
     @Override
@@ -110,12 +114,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDto> findById(Long id) {
+        return userRepository.findById(id).stream().map(user -> userMapper.userEntityToUserDto(user)).findFirst();
+    }
+
+    @Override
+    @Transactional
+    public UserDto blockUnblockUser(Long id) throws RoleNotFoundException, UserNotFoundException {
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            if (user instanceof VendorEntity) {
+                List<DishEntity> dishes = ((VendorEntity) user).getDishes();
+                    for (DishEntity dish : dishes) {
+                        dish.setDeleted(!user.isLocked());
+                    }
+            } else if (user instanceof CustomerEntity) {
+                ((CustomerEntity) user).setCart(null);
+            } else if (user instanceof CourierEntity) {
+                ((CourierEntity) user).setChatId(null);
+            } else throw new RoleNotFoundException();
+            user.setLocked(!user.isLocked());
+            return userMapper.userEntityToUserDto(user);
+        } else throw new UserNotFoundException("Пользователь не найден");
+    }
+
+    @Override
     public boolean checkAvailable(Long id) {
         CourierEntity courierEntity = userRepository.findAllCourier().stream().filter(courier -> Objects.equals(courier.getId(), id)).findFirst().get();
-        if (courierEntity.getOrderEntityList().isEmpty()) {
-            return true;
-        }
-        return false;
+        return courierEntity.getOrderEntityList().isEmpty();
     }
 
     /**

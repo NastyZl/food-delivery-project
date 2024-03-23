@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.nastyzl.fooddelivery.exception.*;
 
+import javax.management.relation.RoleNotFoundException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -23,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({UserNotFoundException.class})
     public String handleUserNotFoundException(UserNotFoundException ex, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("message", ex);
+        redirectAttributes.addFlashAttribute("message", ex.getMessage());
         return "redirect:/404";
     }
     @ExceptionHandler({MaxQuantityExceededException.class})
@@ -35,5 +37,11 @@ public class GlobalExceptionHandler {
     public String handleNullQuantityOfDishesException(NullQuantityOfDishesException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("nullQuantityErrorMessage", ex.getMessage());
         return "redirect:/vendor/dishes";
+    }
+
+    @ExceptionHandler({RoleNotFoundException.class})
+    public String handleRoleNotFoundException(RoleNotFoundException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        return "redirect:/404";
     }
 }

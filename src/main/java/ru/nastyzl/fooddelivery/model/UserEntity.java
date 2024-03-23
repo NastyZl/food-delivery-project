@@ -17,6 +17,9 @@ public abstract class UserEntity {
     @Column(nullable = false)
     private Long id;
 
+    @Column(name = "is_locked")
+    private boolean isLocked;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -39,7 +42,6 @@ public abstract class UserEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
-    public abstract UserRole getRole();
 
     public UserEntity() {
     }
@@ -51,6 +53,15 @@ public abstract class UserEntity {
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.address = address;
+    }
+    public abstract UserRole getRole();
+
+    public AddressEntity getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressEntity address) {
         this.address = address;
     }
 
@@ -108,5 +119,13 @@ public abstract class UserEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 }

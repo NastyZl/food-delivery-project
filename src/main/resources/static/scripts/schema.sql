@@ -34,6 +34,7 @@ create table users
             unique,
     availability boolean,
     chat_id      bigint,
+    is_locked    boolean,
     address_id   bigint
         constraint fk_address_id
             references addresses

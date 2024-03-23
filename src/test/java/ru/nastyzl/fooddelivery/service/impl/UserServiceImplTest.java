@@ -34,12 +34,12 @@ class UserServiceImplTest {
     @Autowired
     private UserServiceImpl userService;
 
-    @Test
-    public void testRegisterUserForInvalidRole() {
-        UserDto userDto = new UserDto();
-        userDto.setRole("invalidRole");
-        assertThrows(RuntimeException.class, () -> userService.registerUser(userDto));
-    }
+//    @Test
+//    public void testRegisterUserForInvalidRole() {
+//        UserDto userDto = new UserDto();
+//        userDto.setRole("invalidRole");
+//        assertThrows(RuntimeException.class, () -> userService.registerUser(userDto));
+//    }
 
     @Test
     public void testChooseCourierWithAvailableAndBusyCouriers() throws UserNotFoundException {

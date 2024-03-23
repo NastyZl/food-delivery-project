@@ -42,11 +42,11 @@ public class AuthController {
     public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) throws InvalidRoleException {
         userValidator.validate(user, bindingResult);
 
-        if (user.getRole().equals(UserRole.VENDOR.getValue()) && bindingResult.hasErrors()) {
+        if (user.getRole().equals(UserRole.VENDOR) && bindingResult.hasErrors()) {
             return "/auth/registration";
         } else if (bindingResult.hasFieldErrors("username") || bindingResult.hasFieldErrors("email")
                 || bindingResult.hasFieldErrors("firstName") || bindingResult.hasFieldErrors("lastName")
-                || bindingResult.hasFieldErrors("phone")) {
+                || bindingResult.hasFieldErrors("phone") || bindingResult.hasFieldErrors("password")) {
             return "/auth/registration";
         }
 

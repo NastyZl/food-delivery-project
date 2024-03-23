@@ -37,7 +37,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        System.out.println(user.isLocked());
+        return !user.isLocked();
     }
 
     @Override

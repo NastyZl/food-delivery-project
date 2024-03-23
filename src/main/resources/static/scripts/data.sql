@@ -5,17 +5,20 @@ VALUES (1, 'Рязань', 1, 3, 'Ленина', '17'),
 
 -- Vendors
 
-INSERT INTO users (id, role, email, first_name, last_name, password, phone, username, address_id)
-VALUES (4,'ROLE_VENDOR', 'petrov22@gmail.com', 'Сергей', 'Петров', '$2a$10$cXw6hS3jaImnq2tjoDmPHu/ae584fM2tOUmG1XfblgUj81zaoPFnG', '+79105038796', 'petrov22', 1),
-       (5, 'ROLE_VENDOR', 'egorov40@gmail.com', 'Иван', 'Егоров', '$2a$10$..7XXbTVTOxnGAVfmNXdt.jTrNHOhzYsOrhZoGAjCtVE3iw1UOjxi', '+79105038777', 'egorov40',2);
+INSERT INTO users (id, role, email, first_name, last_name, password, phone, username, address_id, is_locked)
+VALUES (4,'ROLE_VENDOR', 'petrov22@gmail.com', 'Сергей', 'Петров', '$2a$10$cXw6hS3jaImnq2tjoDmPHu/ae584fM2tOUmG1XfblgUj81zaoPFnG', '+79105038796', 'petrov22', 1, false),
+       (5, 'ROLE_VENDOR', 'egorov40@gmail.com', 'Иван', 'Егоров', '$2a$10$..7XXbTVTOxnGAVfmNXdt.jTrNHOhzYsOrhZoGAjCtVE3iw1UOjxi', '+79105038777', 'egorov40',2, false);
 
 -- Customer
-INSERT INTO users (role, id, first_name, email, username, phone, last_name, password, availability, chat_id, address_id)
-VALUES ('ROLE_CUSTOMER', 1, 'Иван', 'ivanov@gmail.ru', 'customer1', '+79502589454', 'Иванов', '$2a$10$glLqIGIYiTwF4wOjZwFdOewh966/GEVrJUm2I4V.22Esz6Q8v67Wy', NULL, NULL, NULL);
+INSERT INTO users (role, id, first_name, email, username, phone, last_name, password, is_locked)
+VALUES ('ROLE_CUSTOMER', 1, 'Иван', 'ivanov@gmail.ru', 'customer1', '+79502589454', 'Иванов', '$2a$10$glLqIGIYiTwF4wOjZwFdOewh966/GEVrJUm2I4V.22Esz6Q8v67Wy', false);
 
 -- Courier
-INSERT INTO users (role, id, first_name, email, username, phone, last_name, password, availability, chat_id, address_id)
-VALUES ('ROLE_COURIER', 6, 'Настя', 'azlatovchena20@mail.ru', 'courier_1', '+79105038707', 'Златовчена', '$2a$10$6u8ItWkmsX6Fzm9f28iAd.sBwtETrv6MBjqD9z1oPI.DltrOXY5a6', 'false', 1232153246, NULL);
+INSERT INTO users (role, id, first_name, email, username, phone, last_name, password, availability, chat_id, is_locked)
+VALUES ('ROLE_COURIER', 3, 'Настя', 'azlatovchena20@mail.ru', 'courier_1', '+79105038707', 'Златовчена', '$2a$10$6u8ItWkmsX6Fzm9f28iAd.sBwtETrv6MBjqD9z1oPI.DltrOXY5a6', 'false', 1232153246, false);
+
+INSERT INTO users (role, id, first_name, email, username, phone, last_name, password, is_locked)
+VALUES ('ROLE_ADMIN', 2, 'Настя', 'a20@mail.ru', 'admin', '+79105038707', 'Златовчена', '$2a$12$ctQWKixhg3xrm.EzWfanNeg1SW7dEgYkQHzyGzIyDQjRktFErN75W', false);
 
 INSERT INTO dishes (id, current_price, dishname, description, is_deleted, vendor_id, img_path, quantity)
 VALUES (1, 300, 'Картофельные драники', 'Нежнейший картофель с ярким сметанным соусом', 'false', 5, 'draniki.jpg', 40),
@@ -31,3 +34,7 @@ TRUNCATE TABLE order_items RESTART IDENTITY CASCADE;
 TRUNCATE TABLE carts RESTART IDENTITY CASCADE;
 TRUNCATE TABLE dishes RESTART IDENTITY CASCADE;
 TRUNCATE TABLE users RESTART IDENTITY CASCADE;
+
+delete
+from users
+where id=6;

@@ -2,8 +2,8 @@ package ru.nastyzl.fooddelivery.enums;
 
 public enum UserRole {
     ADMIN(Values.ADMIN, "Администратор"),
-    VENDOR(Values.VENDOR, "Повар"),
     CUSTOMER(Values.CUSTOMER, "Покупатель"),
+    VENDOR(Values.VENDOR, "Повар"),
     COURIER(Values.COURIER, "Курьер");
 
     private final String value;

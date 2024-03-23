@@ -1,27 +1,14 @@
 package ru.nastyzl.fooddelivery.dto;
 
+import ru.nastyzl.fooddelivery.enums.UserRole;
+
 import javax.validation.constraints.*;
 
 public class UserDto {
     private Long id;
     private String username;
     private String role;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    private boolean isLocked;
 
     @NotBlank(message = "Необходимо указать имя")
     private String firstName;
@@ -53,6 +40,30 @@ public class UserDto {
     @NotNull(message = "Необходимо указать подъезд'")
     @Positive(message = "Отрицательным у нас не бывает")
     private Integer entrance;
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getCity() {
         return city;
