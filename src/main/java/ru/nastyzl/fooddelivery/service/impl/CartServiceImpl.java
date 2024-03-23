@@ -58,6 +58,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setUnitPrice(dish.getCurrentPrice());
             cartItem.setCart(cart);
             cartItem.setQuantity(quantity);
+
             cartItemRepository.save(cartItem);
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
@@ -67,6 +68,10 @@ public class CartServiceImpl implements CartService {
         cart.addCartItems(cartItem);
         cart.setTotalPrise(totalPrice(cart.getCartItems()));
         cart.setTotalItems(totalItem(cart.getCartItems()));
+        cartItem.getDish().setQuantity(dish.getQuantity() - 1);
+
+        System.out.println(dish);
+
 
         cart.setCustomer(user);
         return cartRepository.save(cart);
