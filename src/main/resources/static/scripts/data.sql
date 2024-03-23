@@ -27,14 +27,3 @@ INSERT INTO dishes (id, current_price, dishname, description, is_deleted, vendor
 VALUES (3, 400, 'Блинчики с мясом', 'Тонкие блинчики на молоке с сочным фаршем из индейки', 'false', 5, 'blin.jpg', 40),
        (4, 100, 'Салат «Летнее наслаждение»', 'Помидоры, огурцы и зелень с оливковым маслом и пряностью', 'false', 4, 'salat.jpg', 5),
        (5, 500, 'Куриные отбивные', 'Куриное филе в панировке с томатным соусом', 'false', 4, 'otbiv.jpg', 6);
-
-TRUNCATE TABLE orders RESTART IDENTITY CASCADE;
-TRUNCATE TABLE order_items RESTART IDENTITY CASCADE;
-
-TRUNCATE TABLE carts RESTART IDENTITY CASCADE;
-TRUNCATE TABLE dishes RESTART IDENTITY CASCADE;
-TRUNCATE TABLE users RESTART IDENTITY CASCADE;
-
-delete
-from users
-where id=6;
