@@ -40,5 +40,4 @@ public class AdminController {
         model.addAttribute("user", userDto);
         return "admin/accountInfo";
     }
-
 }

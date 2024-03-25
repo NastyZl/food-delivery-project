@@ -51,7 +51,6 @@ public class TelegramRegistrationServiceImpl implements TelegramRegistrationServ
                 .build();
     }
 
-
     private String getPhoneNumber(Contact contact) {
         var phoneNumber = contact.getPhoneNumber();
         if (!phoneNumber.startsWith("+"))

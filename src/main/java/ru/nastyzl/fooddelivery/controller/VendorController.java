@@ -28,5 +28,4 @@ public class VendorController {
         model.addAttribute("dishes", dishService.getAllDishesForVendor(vendorId));
         return "vendor/show-dishes";
     }
-
 }

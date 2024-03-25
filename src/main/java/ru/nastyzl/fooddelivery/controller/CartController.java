@@ -88,7 +88,6 @@ public class CartController {
     public String deleteItem(@RequestParam("id") Long id,
                              Model model,
                              Principal principal) throws UserNotFoundException, DishNotFoundException {
-
         CartEntity shoppingCart = cartService.removeItemFromCart(dishService.getById(id), principal.getName());
         model.addAttribute("shoppingCart", shoppingCart);
         return "redirect:/cart/";

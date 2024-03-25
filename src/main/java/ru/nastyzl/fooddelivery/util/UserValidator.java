@@ -28,6 +28,7 @@ public class UserValidator implements Validator {
 
     /**
      * Validates the input and adds errors if the username already exists
+     *
      * @param target the object to be validated
      * @param errors the Errors object to add validation errors
      */

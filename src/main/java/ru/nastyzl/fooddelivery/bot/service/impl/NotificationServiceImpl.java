@@ -41,7 +41,6 @@ public class NotificationServiceImpl implements NotificationService {
         InlineKeyboardButton button = new InlineKeyboardButton(DELIVERED_BUTTON);
         button.setCallbackData(DELIVERED_BUTTON);
         return new InlineKeyboardMarkup(List.of(List.of(button)));
-
     }
 
     private String getNotificationMessage(OrderEntity order) {

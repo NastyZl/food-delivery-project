@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPaymentType(orderDto.getPaymentType());
 
         CourierEntity courierEntity = userService.chooseCourier();
-        courierEntity.addOrderEntity(order);
+        courierEntity.addOrder(order);
         order.setCourier(courierEntity);
 
         order.setCustomerAddress(orderDto.getAddress());
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setOrderStatus(status);
                 order.setDeliveryDate(LocalDateTime.now());
                 CourierEntity courier = order.getCourier();
-                courier.deleteOrderEntity(orderId);
+                courier.deleteOrder(orderId);
                 if (userService.checkAvailable(courier.getId())) {
                     courier.setAvailability(true);
                 }

@@ -41,7 +41,6 @@ public class AuthController {
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") @Valid UserDto user, BindingResult bindingResult) throws InvalidRoleException {
         userValidator.validate(user, bindingResult);
-
         if (user.getRole().equals(UserRole.VENDOR) && bindingResult.hasErrors()) {
             return "/auth/registration";
         } else if (bindingResult.hasFieldErrors("username") || bindingResult.hasFieldErrors("email")
@@ -49,7 +48,6 @@ public class AuthController {
                 || bindingResult.hasFieldErrors("phone") || bindingResult.hasFieldErrors("password")) {
             return "/auth/registration";
         }
-
         userService.registerUser(user);
         return "redirect:/auth/login";
     }

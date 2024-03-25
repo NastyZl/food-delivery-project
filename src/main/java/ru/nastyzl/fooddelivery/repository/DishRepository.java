@@ -28,5 +28,4 @@ public interface DishRepository extends JpaRepository<DishEntity, Long> {
     @Query("SELECT d FROM DishEntity d WHERE d.vendorEntity.id = :vendorId")
     List<DishEntity> findDishesByVendorId(@Param("vendorId") Long vendorId);
 
-
 }

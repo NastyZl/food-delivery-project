@@ -17,8 +17,8 @@ public class FileUploadUtil {
     /**
      * Saves the uploaded file to the specified directory.
      *
-     * @param uploadDir the directory to save the file
-     * @param fileName name of file
+     * @param uploadDir     the directory to save the file
+     * @param fileName      name of file
      * @param multipartFile uploaded file
      * @throws IOException if I/O error occurs
      */

@@ -56,7 +56,6 @@ public class MainController {
         return "search-result-menu";
     }
 
-
     @GetMapping("/account-info")
     public String accountInfo(Model model, Principal principal) {
         Optional<? extends UserEntity> optionalUser = userService.getByUsername(principal.getName());

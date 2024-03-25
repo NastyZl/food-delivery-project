@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkAvailable(Long id) {
         CourierEntity courierEntity = userRepository.findAllCourier().stream().filter(courier -> Objects.equals(courier.getId(), id)).findFirst().get();
-        return courierEntity.getOrderEntityList().isEmpty();
+        return courierEntity.getOrders().isEmpty();
     }
 
     /**

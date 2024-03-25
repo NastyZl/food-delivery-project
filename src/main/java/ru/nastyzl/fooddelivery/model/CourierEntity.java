@@ -14,18 +14,18 @@ public class CourierEntity extends UserEntity {
     private Boolean availability;
 
     @OneToMany(mappedBy = "courier")
-    private List<OrderEntity> orderEntityList = new ArrayList<>();
+    private List<OrderEntity> orders = new ArrayList<>();
 
-    public List<OrderEntity> getOrderEntityList() {
-        return orderEntityList;
+    public List<OrderEntity> getOrders() {
+        return orders;
     }
 
-    public void addOrderEntity(OrderEntity order) {
-        this.orderEntityList.add(order);
+    public void addOrder(OrderEntity order) {
+        this.orders.add(order);
     }
 
-    public void deleteOrderEntity(Long id) {
-        this.orderEntityList.removeIf(order -> order.getId().equals(id));
+    public void deleteOrder(Long id) {
+        this.orders.removeIf(order -> order.getId().equals(id));
     }
 
     @Column(name = "chat_id")
@@ -36,7 +36,6 @@ public class CourierEntity extends UserEntity {
             return availability;
         else return false;
     }
-
 
     public Long getChatId() {
         return chatId;
@@ -53,7 +52,6 @@ public class CourierEntity extends UserEntity {
 
     public CourierEntity() {
     }
-
 
     public Boolean getAvailability() {
         return availability;

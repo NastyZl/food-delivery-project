@@ -48,9 +48,9 @@ public class CartServiceImpl implements CartService {
             throw new DifferentVendorsException("разные вендоры");
         }
 
-        Set<CartItemEntity> cartItemList = cart.getCartItems();
+        Set<CartItemEntity> cartItems = cart.getCartItems();
 
-        CartItemEntity cartItem = find(cartItemList, dishDto.getId());
+        CartItemEntity cartItem = find(cartItems, dishDto.getId());
 
         DishEntity dish = dishService.dishShowDtoToDishEntity(dishDto);
 
