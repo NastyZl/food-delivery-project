@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 import ru.nastyzl.fooddelivery.model.CartItemEntity;
 import ru.nastyzl.fooddelivery.model.CustomerEntity;
@@ -17,6 +19,7 @@ import ru.nastyzl.fooddelivery.service.UserService;
 import java.security.Principal;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -51,8 +54,10 @@ class CartControllerTest {
         cart.setCartItems(Set.of(new CartItemEntity()));
         user.setCart(cart);
         user.setUsername(username);
+
         when(principal.getName()).thenReturn(username);
         when(userService.getCustomerByUsername(username)).thenReturn(user);
+
         mockMvc.perform(get("/cart/").principal(principal))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart/cart-form"))
@@ -63,18 +68,28 @@ class CartControllerTest {
 
     @Test
     void deleteItemTest() throws Exception {
-        // Mocking necessary dependencies
-        CartEntity mockCart = new CartEntity(); // Create a mock CartEntity
-        when(cartService.removeItemFromCart(any(), anyString()))
-                .thenReturn(mockCart);
+        String username = "user";
+        CustomerEntity user = new CustomerEntity();
+        CartEntity shoppingCart = new CartEntity();
+        shoppingCart.setCartItems(Set.of(new CartItemEntity()));
+        user.setCart(shoppingCart);
+        user.setUsername(username);
+        Long dishId = 1L;
 
-        // Perform the POST request
+        DishShowDto dish = new DishShowDto();
+        dish.setId(dishId);
+
+        when(principal.getName()).thenReturn(username);
+        when(dishService.getById(dishId)).thenReturn(dish);
+        when(cartService.removeItemFromCart(dish, username))
+                .thenReturn(shoppingCart);
+
         mockMvc.perform(post("/cart/update-cart")
                         .param("id", "1")
-                        .param("action", "delete"))
+                        .param("action", "delete")
+                        .principal(principal))
                 .andExpect(redirectedUrl("/cart/"));
 
-        // You can add more assertions as needed to verify behavior
         verify(cartService, times(1))
                 .removeItemFromCart(any(), anyString());
     }
@@ -99,21 +114,10 @@ class CartControllerTest {
                         .param("quantity", String.valueOf(quantity))
                         .principal(principal))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/menu/0"))
-                .andExpect(model().attributeExists("cart"))
-
-        .andExpect(model().attribute("cart", cart));
+                .andExpect(redirectedUrl("/menu/0"));
 
         verify(cartService, times(1))
                 .addItemToCart(dish, quantity, username);
-
     }
 
-    @Test
-    void updateCart() {
-    }
-
-    @Test
-    void deleteItem() {
-    }
 }

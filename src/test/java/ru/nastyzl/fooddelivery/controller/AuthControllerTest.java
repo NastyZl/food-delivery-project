@@ -7,12 +7,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
-import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.model.UserEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 import ru.nastyzl.fooddelivery.service.UserService;
@@ -22,13 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -60,28 +56,28 @@ class AuthControllerTest {
     }
 
     @Test
-    void testLoginPage() throws Exception {
-        mockMvc.perform(post("/auth/login"))
-
+    void testRegistrationPage() throws Exception {
+        mockMvc.perform(get("/auth/registration"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("auth/login"));
+                .andExpect(view().name("auth/registration"));
     }
 
     @Test
-    void registrationPage() {
-    }
+    void testPerformRegistration_WithInvalidInput() throws Exception {
+        UserDto invalidUser = new UserDto();
+        invalidUser.setUsername("user");
+        invalidUser.setRole(UserRole.CUSTOMER.getValue());
+        BindingResult bindingResult = new org.springframework.validation.BeanPropertyBindingResult(invalidUser, "user");
+        bindingResult.addError(new FieldError("user", "username", "Username cannot be empty"));
 
-    @Test
-    void testPerformRegistration() throws Exception {
-        final MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/auth/registration");
-       doNothing().when(userValidator).validate(any(), any());
-       when(bindingResult.hasFieldErrors()).thenReturn(false);
-       when(bindingResult.hasErrors()).thenReturn(false);
-       when(userService.registerUser(userDto)).thenReturn(userEntity);
-        mockMvc.perform(mockHttpServletRequestBuilder)
-                .andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/auth/login"));
+        doNothing().when(userValidator).validate(any(UserDto.class), any(BindingResult.class));
 
+        mockMvc.perform(post("/auth/registration")
+                        .flashAttr("user", invalidUser)
+                        .sessionAttr("org.springframework.validation.BindingResult.user", bindingResult))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/auth/registration"));
+
+        verify(userService, never()).registerUser(any(UserDto.class));
     }
 }

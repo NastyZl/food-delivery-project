@@ -15,6 +15,9 @@ public class OrderDto {
     @NotNull(message = "Корзина не должна быть пустой")
     CartEntity cart;
 
+    public OrderDto() {
+    }
+
     public OrderDto(CartEntity cart) {
         this.cart = cart;
     }
