@@ -38,6 +38,7 @@ public class CartServiceImpl implements CartService {
     public CartEntity addItemToCart(DishShowDto dishDto, Integer quantity, String username) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
         CustomerEntity user = userService.getCustomerByUsername(username);
         CartEntity cart = user.getCart();
+
         if (dishDto.isDeleted()) {
             throw new DishNotFoundException("Это блюдо уже недоступно");
         }
@@ -49,11 +50,9 @@ public class CartServiceImpl implements CartService {
         }
 
         Set<CartItemEntity> cartItems = cart.getCartItems();
-
         CartItemEntity cartItem = find(cartItems, dishDto.getId());
 
         DishEntity dish = dishService.dishShowDtoToDishEntity(dishDto);
-
 
         if (cartItem == null) {
             cartItem = new CartItemEntity();
@@ -61,17 +60,16 @@ public class CartServiceImpl implements CartService {
             cartItem.setUnitPrice(dish.getCurrentPrice());
             cartItem.setCart(cart);
             cartItem.setQuantity(quantity);
-
-            cartItemRepository.save(cartItem);
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartItemRepository.save(cartItem);
         }
 
+        cartItemRepository.save(cartItem);
         cart.addCartItems(cartItem);
         cart.setTotalPrise(totalPrice(cart.getCartItems()));
         cart.setTotalItems(totalItem(cart.getCartItems()));
-        cartItem.getDish().setQuantity(dish.getQuantity() - 1);
+
+        dishService.decreaseDishQuantityById(dish.getId());
 
         cart.setCustomer(user);
         return cartRepository.save(cart);
@@ -129,33 +127,29 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartEntity removeItemFromCart(DishShowDto dishDto, String username) throws UserNotFoundException, DishNotFoundException {
-        Optional<? extends UserEntity> userOptional = userService.getByUsername(username);
-        if (userOptional.isPresent()) {
-            CustomerEntity customer = (CustomerEntity) userOptional.get();
-            CartEntity cart = customer.getCart();
-            Set<CartItemEntity> cartItemSet = cart.getCartItems();
+        CustomerEntity customer = userService.getByUsername(username)
+                .map(user -> (CustomerEntity) user)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            Optional<DishEntity> optionalDish = dishService.findById(dishDto.getId());
-            if (optionalDish.isPresent()) {
+        CartEntity cart = customer.getCart();
+        Set<CartItemEntity> cartItemSet = cart.getCartItems();
 
-                DishEntity dish = optionalDish.get();
-                Integer dishQuantity = dish.getQuantity();
+        DishEntity dish = dishService.findById(dishDto.getId())
+                .orElseThrow(() -> new DishNotFoundException("Dish not found"));
 
-                CartItemEntity item = find(cartItemSet, dishDto.getId());
-                cartItemSet.remove(item);
-
-                dish.setQuantity(dishQuantity + item.getQuantity());
-
-                cartItemRepository.delete(item);
-
-                cart.setTotalPrise(totalPrice(cart.getCartItems()));
-                cart.setTotalItems(totalItem(cart.getCartItems()));
-
-                return cartRepository.save(cart);
-            } else throw new DishNotFoundException("Блюдо не найдено!");
-        } else {
-            throw new UserNotFoundException("update cart");
+        CartItemEntity item = find(cartItemSet, dishDto.getId());
+        if (item == null) {
+            throw new DishNotFoundException("Item not found in cart");
         }
+
+        dish.setQuantity(dish.getQuantity() + item.getQuantity());
+        cartItemSet.remove(item);
+        cartItemRepository.delete(item);
+
+        cart.setTotalPrise(totalPrice(cartItemSet));
+        cart.setTotalItems(totalItem(cartItemSet));
+
+        return cartRepository.save(cart);
     }
 
     /**

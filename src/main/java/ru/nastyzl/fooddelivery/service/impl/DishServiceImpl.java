@@ -89,6 +89,22 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
+    public void decreaseDishQuantityById(Long dishId) throws DishNotFoundException {
+        DishEntity dish = dishRepository.findById(dishId).orElseThrow(DishNotFoundException::new);
+        Integer currentQuantity = dish.getQuantity();
+        if (currentQuantity > 0) {
+            dish.setQuantity(currentQuantity-1);
+            if (currentQuantity - 1 == 0) {
+                dish.setDeleted(true);
+            }
+            dishRepository.save(dish);
+        } else {
+            throw new IllegalStateException("Количество блюд не может быть отрицательным");
+        }
+    }
+
+    @Override
     public Optional<DishEntity> findById(Long id) {
         return dishRepository.findById(id);
     }

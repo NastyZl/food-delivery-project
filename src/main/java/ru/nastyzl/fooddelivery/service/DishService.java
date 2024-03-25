@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface DishService {
     Optional<DishEntity> getByDishName(String dishName);
+    void decreaseDishQuantityById(Long dishId) throws DishNotFoundException;
 
     List<DishShowDto> getAllDishesForVendor(Long vendorId);
 
