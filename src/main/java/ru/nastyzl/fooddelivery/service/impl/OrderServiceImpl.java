@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
+import ru.nastyzl.fooddelivery.exception.CourierNotFoundException;
 import ru.nastyzl.fooddelivery.exception.OrderNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CartItemEntity;
@@ -49,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderEntity save(OrderDto orderDto) throws UserNotFoundException, CartNotFoundException {
+    public OrderEntity save(OrderDto orderDto) throws CartNotFoundException, CourierNotFoundException, UserNotFoundException {
         OrderEntity order = new OrderEntity();
         order.setOrderDate(LocalDateTime.now());
         order.setCustomer(orderDto.getCart().getCustomer());
@@ -79,9 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
         cartService.deleteCartById(orderDto.getCart().getId());
 
-        OrderEntity save = orderRepository.save(order);
-
-        return save;
+        return orderRepository.save(order);
     }
 
     @Override
@@ -123,18 +122,4 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-    @Override
-    public List<OrderEntity> findALlOrders() {
-        return null;
-    }
-
-    @Override
-    public OrderEntity acceptOrder(Long id) {
-        return null;
-    }
-
-    @Override
-    public void cancelOrder(Long id) {
-
-    }
 }

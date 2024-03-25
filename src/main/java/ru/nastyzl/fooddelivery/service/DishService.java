@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface DishService {
     Optional<DishEntity> getByDishName(String dishName);
 
-    List<DishShowDto> getAllDish();
-
     List<DishShowDto> getAllDishesForVendor(Long vendorId);
 
     DishShowDto getById(Long id);
@@ -29,8 +27,6 @@ public interface DishService {
     Page<DishShowDto> pageDishes(int pageNo);
 
     Optional<DishEntity> findById(Long id);
-
-    List<DishCreateDto> findAll();
 
     Page<DishShowDto> searchDishes(String keyword, int pageNo);
 

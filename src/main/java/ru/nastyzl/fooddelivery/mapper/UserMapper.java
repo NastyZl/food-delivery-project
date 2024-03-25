@@ -13,8 +13,6 @@ public interface UserMapper {
 
     VendorEntity userDtoToVendorEntity(UserDto userDto);
 
-    UserDto vendorEntityToUserDto(VendorEntity vendor);
-
     CustomerEntity userDtoToCustomerEntity(UserDto userDto);
 
     UserDto userEntityToUserDto(UserEntity user);

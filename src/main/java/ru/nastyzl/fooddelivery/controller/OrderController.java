@@ -5,11 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.nastyzl.fooddelivery.bot.service.impl.NotificationServiceImpl;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
 import ru.nastyzl.fooddelivery.enums.UserRole;
 import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
+import ru.nastyzl.fooddelivery.exception.CourierNotFoundException;
 import ru.nastyzl.fooddelivery.exception.OrderNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.OrderEntity;
@@ -47,13 +49,11 @@ public class OrderController {
 
     @PostMapping("/create-order")
     public String createOrder(Principal principal,
-                              Model model, @ModelAttribute("order") @Valid OrderDto orderDto, BindingResult bindingResult, @RequestParam("address") String address, @RequestParam("paymentType") PaymentType paymentType) throws UserNotFoundException, CartNotFoundException {
-        if (bindingResult.hasErrors()) {
+                              Model model, @ModelAttribute("order") @Valid OrderDto orderDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, @RequestParam("address") String address, @RequestParam("paymentType") PaymentType paymentType) throws UserNotFoundException, CartNotFoundException, CourierNotFoundException {
+        orderDto.setCart(cartService.getCart(principal.getName()));
+        if (bindingResult.hasFieldErrors("address")) {
             return "/order/check-out";
         }
-        orderDto.setAddress(address);
-        orderDto.setPaymentType(paymentType);
-        orderDto.setCart(cartService.getCart(principal.getName()));
         OrderEntity order = orderService.save(orderDto);
         notificationServiceImpl.sendNotification(order);
         model.addAttribute("order", order);

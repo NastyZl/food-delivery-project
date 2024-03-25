@@ -46,4 +46,11 @@ public class GlobalExceptionHandler {
         redirectAttributes.addFlashAttribute("message", ex.getMessage());
         return "redirect:/404";
     }
+
+    @ExceptionHandler({CourierNotFoundException.class})
+    public String handleCourierNotFoundException(CourierNotFoundException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        return "redirect:/404";
+    }
+
 }

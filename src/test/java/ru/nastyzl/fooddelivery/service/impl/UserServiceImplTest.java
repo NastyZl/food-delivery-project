@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nastyzl.fooddelivery.dto.UserDto;
+import ru.nastyzl.fooddelivery.exception.CourierNotFoundException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.CourierEntity;
 import ru.nastyzl.fooddelivery.model.UserEntity;
@@ -35,7 +36,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testChooseCourierWithAvailableAndBusyCouriers() throws UserNotFoundException {
+    public void testChooseCourierWithAvailableAndBusyCouriers() throws UserNotFoundException, CourierNotFoundException {
         CourierEntity courier1 = new CourierEntity();
         courier1.setAvailability(true);
         courier1.setChatId(1L);
@@ -65,7 +66,7 @@ class UserServiceImplTest {
         when(userRepository.findAllCourier()).thenReturn(Arrays.asList(courier1, courier2
         ));
 
-        assertThrows(UserNotFoundException.class, () -> {
+        assertThrows(CourierNotFoundException.class, () -> {
             userService.chooseCourier();
         });
     }

@@ -12,4 +12,5 @@ public class WebConfiguration extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/");
     }
+
 }

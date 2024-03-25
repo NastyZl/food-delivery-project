@@ -2,9 +2,13 @@ package ru.nastyzl.fooddelivery.service;
 
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import ru.nastyzl.fooddelivery.dto.UserDto;
+import ru.nastyzl.fooddelivery.exception.CourierNotFoundException;
 import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
-import ru.nastyzl.fooddelivery.model.*;
+import ru.nastyzl.fooddelivery.model.CourierEntity;
+import ru.nastyzl.fooddelivery.model.CustomerEntity;
+import ru.nastyzl.fooddelivery.model.UserEntity;
+import ru.nastyzl.fooddelivery.model.VendorEntity;
 
 import javax.management.relation.RoleNotFoundException;
 import java.util.List;
@@ -17,13 +21,11 @@ public interface UserService {
 
     boolean checkAvailable(Long id);
 
-    CourierEntity chooseCourier() throws UserNotFoundException;
+    CourierEntity chooseCourier() throws CourierNotFoundException;
 
     VendorEntity getVendorByUsername(String username) throws UserNotFoundException;
 
     CustomerEntity getCustomerByUsername(String username) throws UserNotFoundException;
-
-    Optional<CourierEntity> getCourierByUsername(String username);
 
     UserEntity registerUser(UserDto userDto) throws InvalidRoleException;
 
@@ -35,9 +37,6 @@ public interface UserService {
 
     Optional<CourierEntity> findCourierByPhoneNumber(String phone);
 
-
     Optional<? extends UserEntity> getByUsername(String username);
-
-    List<DishEntity> getAllDishes(String username);
 
 }

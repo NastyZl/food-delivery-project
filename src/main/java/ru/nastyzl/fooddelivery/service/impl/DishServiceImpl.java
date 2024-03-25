@@ -94,13 +94,6 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<DishCreateDto> findAll() {
-        return dishRepository.findAll().stream()
-                .map(dishMapper::dishEntityToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Page<DishShowDto> searchDishes(String keyword, int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 10);
         Page<DishEntity> dishes = dishRepository.searchDishes(keyword, pageable);
@@ -150,14 +143,6 @@ public class DishServiceImpl implements DishService {
     public List<DishShowDto> getAllDishesForVendor(Long vendorId) {
         return dishRepository.findDishesByVendorId(vendorId).stream()
                 .map(this::dishEntityToDishShowDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DishShowDto> getAllDish() {
-        List<DishEntity> dishEntityList = dishRepository.findAllActiveDishes();
-        return dishEntityList.stream()
-                .map(this::dishEntityToDishShowDto)
-                .collect(Collectors.toList());
     }
 
     @Override

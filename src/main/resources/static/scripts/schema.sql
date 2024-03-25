@@ -123,3 +123,4 @@ create table order_items
         constraint fk_order_id
             references orders
 );
+

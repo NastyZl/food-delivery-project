@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.enums.UserRole;
+import ru.nastyzl.fooddelivery.exception.CourierNotFoundException;
 import ru.nastyzl.fooddelivery.exception.InvalidRoleException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.mapper.AddressMapper;
@@ -16,7 +17,10 @@ import ru.nastyzl.fooddelivery.repository.UserRepository;
 import ru.nastyzl.fooddelivery.service.UserService;
 
 import javax.management.relation.RoleNotFoundException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -46,11 +50,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public CustomerEntity getCustomerByUsername(String username) throws UserNotFoundException {
         return userRepository.findAllCustomer().stream().filter(vendor -> vendor.getUsername().equals(username)).findFirst().orElseThrow(() -> new UserNotFoundException("пользователь не найден"));
-    }
-
-    @Override
-    public Optional<CourierEntity> getCourierByUsername(String username) {
-        return userRepository.findAllCourier().stream().filter(courier -> courier.getUsername().equals(username)).findFirst();
     }
 
     /**
@@ -158,11 +157,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public CourierEntity chooseCourier() throws UserNotFoundException {
+    public CourierEntity chooseCourier() throws CourierNotFoundException {
 
         List<CourierEntity> busyCouriers = userRepository.findAllCourier()
                 .stream()
-                .filter(courier -> !courier.isAvailable() && courier.getChatId() != null)
+                .filter(courier -> !courier.isAvailable() && courier.getChatId() != null && !courier.isLocked())
                 .collect(Collectors.toList());
 
         List<CourierEntity> availableCouriers = userRepository.findAllCourier()
@@ -175,7 +174,7 @@ public class UserServiceImpl implements UserService {
         } else if (!busyCouriers.isEmpty()) {
             return getRandomCourier(busyCouriers);
         } else
-            throw new UserNotFoundException("Ни один курьер не найден.");
+            throw new CourierNotFoundException("Приносим свои изменения. Заказ сделать невозможно, ни один курьер у нас не работает.");
     }
 
     private CourierEntity getRandomCourier(List<CourierEntity> couriers) {
@@ -183,15 +182,5 @@ public class UserServiceImpl implements UserService {
         CourierEntity courierEntity = couriers.get(random.nextInt(couriers.size()));
         courierEntity.setAvailability(false);
         return courierEntity;
-    }
-
-    @Override
-    public List<DishEntity> getAllDishes(String username) {
-        Optional<? extends UserEntity> user = userRepository.findByUsername(username);
-        if (user.isPresent() && user.get() instanceof VendorEntity) {
-            return ((VendorEntity) user.get()).getDishes();
-        } else {
-            return Collections.emptyList();
-        }
     }
 }

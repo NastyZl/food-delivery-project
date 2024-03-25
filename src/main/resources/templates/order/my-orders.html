@@ -12,7 +12,7 @@
 <th:block th:include="/navbar"></th:block>
 
 <div class="container">
-    <h1 class="text-center my-4">Мои блюда</h1>
+    <h1 class="text-center my-4">Мои заказы</h1>
     <table class="table">
         <thead>
         <tr>
@@ -20,7 +20,7 @@
             <th>Дата заказа</th>
             <th>Сумма заказа</th>
             <th>Статус заказа</th>
-            <th>Время выполнения</th>
+            <th>Дата доставки</th>
             <th>Еще</th>
         </tr>
         </thead>
@@ -30,7 +30,8 @@
             <td th:text="${order.orderDate}"></td>
             <td th:text="${order.totalAmount}"></td>
             <td th:text="${order.orderStatus}"></td>
-            <td th:if="${order.orderStatus}=='DONE'" th:text="${order.deliveryDate}"> -</td>
+            <td th:if="${order.orderStatus.value} == 'Выполен'" th:text="${order.deliveryDate}"></td>
+            <td th:if="${order.orderStatus.value != 'Выполен'}">-</td>
             <td>
                 <a href="#" th:href="@{/order/detail/{id}(id=${order.id})}">подробнее (в разработке)</a>
             </td>

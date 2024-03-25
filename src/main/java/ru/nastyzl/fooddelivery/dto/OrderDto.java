@@ -4,15 +4,13 @@ import ru.nastyzl.fooddelivery.enums.PaymentType;
 import ru.nastyzl.fooddelivery.model.CartEntity;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class OrderDto {
     @NotBlank(message = "Заполните адрес")
     String address;
-    @NotNull(message = "Выберите способ оплаты")
+
     PaymentType paymentType;
 
-    @NotNull(message = "Корзина не должна быть пустой")
     CartEntity cart;
 
     public OrderDto() {
