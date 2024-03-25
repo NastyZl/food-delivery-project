@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import ru.nastyzl.fooddelivery.dto.UserDto;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
-import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.UserService;
 
 import javax.management.relation.RoleNotFoundException;
@@ -18,7 +17,6 @@ import javax.management.relation.RoleNotFoundException;
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
-    private CartService cartService;
 
     public AdminController(UserService userService) {
         this.userService = userService;

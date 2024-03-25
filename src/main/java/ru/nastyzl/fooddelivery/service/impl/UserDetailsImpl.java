@@ -8,6 +8,9 @@ import ru.nastyzl.fooddelivery.model.UserEntity;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Implementation of UserDetails interface
+ */
 public class UserDetailsImpl implements UserDetails {
     private final UserEntity user;
 

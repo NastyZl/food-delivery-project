@@ -32,11 +32,6 @@ public class MainController {
         return "exception/error";
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "navbar-test";
-
-    }
 
     @GetMapping("menu/{pageNo}")
     public String dishPage(@PathVariable("pageNo") int pageNo, Model model) {

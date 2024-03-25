@@ -47,10 +47,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.containerMessage = containerMessage;
         this.updateStatusService = updateStatusService;
         this.telegramRegistrationService = telegramRegistrationService;
-        List<BotCommand> listOfCommands = new ArrayList<>();
-        listOfCommands.add(new BotCommand("/help", "справочная информация"));
+        List<BotCommand> commands = new ArrayList<>();
+        commands.add(new BotCommand("/help", "справочная информация"));
         try {
-            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
+            this.execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
             logger.error("Ошибка при загрузке команд для бота: " + e.getMessage());
         }
@@ -125,17 +125,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-    public void sendMessageAndUpdateButton(EditMessageReplyMarkup editMessageReplyMarkup) {
-        try {
-            execute(editMessageReplyMarkup);
-            updateStatusService.sendUpdateStatus(OrderStatus.DELIVERED, containerMessage.findMessage(Long.valueOf(editMessageReplyMarkup.getChatId()),
-                    editMessageReplyMarkup.getMessageId().longValue()));
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
     public Integer sendMessageAndGetId(SendMessage sendMessage) {
         if (sendMessage != null) {
             try {
@@ -146,14 +135,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         }
         return null;
-    }
-
-    private void sendEditMessageReplyMarkup(EditMessageReplyMarkup editMessageReplyMarkup) {
-        try {
-            execute(editMessageReplyMarkup);
-        } catch (TelegramApiException e) {
-            logger.error("Сообщение не отправлено (editMessageReplyMarkup) : " + e.getMessage());
-        }
     }
 
     private void sendEditMessageText(EditMessageText editMessageText) {

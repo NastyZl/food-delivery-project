@@ -1,12 +1,12 @@
 package ru.nastyzl.fooddelivery.dto;
 
-import ru.nastyzl.fooddelivery.enums.UserRole;
-
 import javax.validation.constraints.*;
 
 public class UserDto {
     private Long id;
+    @NotBlank(message = "Необходимо указать логин")
     private String username;
+    @NotNull
     private String role;
     private boolean isLocked;
 

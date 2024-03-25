@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.nastyzl.fooddelivery.model.AddressEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 import ru.nastyzl.fooddelivery.repository.AddressRepository;
-import ru.nastyzl.fooddelivery.service.AddressService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

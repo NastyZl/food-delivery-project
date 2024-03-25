@@ -1,11 +1,10 @@
 package ru.nastyzl.fooddelivery.service;
 
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.OrderStatus;
 import ru.nastyzl.fooddelivery.exception.CartNotFoundException;
-import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.exception.OrderNotFoundException;
+import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
 import ru.nastyzl.fooddelivery.model.OrderEntity;
 
 import java.util.List;
@@ -17,6 +16,7 @@ public interface OrderService {
     List<OrderEntity> findAllForCustomer(String username) throws UserNotFoundException;
 
     List<OrderEntity> findAllForVendor(String username) throws UserNotFoundException;
+
     Optional<OrderEntity> findById(Long id);
 
     List<OrderEntity> findALlOrders();

@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Service for handling cart actions.
+ */
 @Service
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
@@ -69,9 +72,6 @@ public class CartServiceImpl implements CartService {
         cart.setTotalPrise(totalPrice(cart.getCartItems()));
         cart.setTotalItems(totalItem(cart.getCartItems()));
         cartItem.getDish().setQuantity(dish.getQuantity() - 1);
-
-        System.out.println(dish);
-
 
         cart.setCustomer(user);
         return cartRepository.save(cart);

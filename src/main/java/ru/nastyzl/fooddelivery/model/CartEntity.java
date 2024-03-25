@@ -7,6 +7,17 @@ import java.util.Set;
 @Entity
 @Table(name = "carts")
 public class CartEntity {
+    @Override
+    public String toString() {
+        return "CartEntity{" +
+                "id=" + id +
+                ", customer=" + customer +
+                ", totalPrise=" + totalPrise +
+                ", totalItems=" + totalItems +
+                ", cartItems=" + cartItems +
+                '}';
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

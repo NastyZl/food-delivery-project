@@ -9,8 +9,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Utility class for file upload operations.
+ */
 public class FileUploadUtil {
 
+    /**
+     * Saves the uploaded file to the specified directory.
+     *
+     * @param uploadDir the directory to save the file
+     * @param fileName name of file
+     * @param multipartFile uploaded file
+     * @throws IOException if I/O error occurs
+     */
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {

@@ -19,6 +19,9 @@ import javax.management.relation.RoleNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for handling user actions.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository<UserEntity> userRepository;
@@ -126,9 +129,9 @@ public class UserServiceImpl implements UserService {
             UserEntity user = optionalUser.get();
             if (user instanceof VendorEntity) {
                 List<DishEntity> dishes = ((VendorEntity) user).getDishes();
-                    for (DishEntity dish : dishes) {
-                        dish.setDeleted(!user.isLocked());
-                    }
+                for (DishEntity dish : dishes) {
+                    dish.setDeleted(!user.isLocked());
+                }
             } else if (user instanceof CustomerEntity) {
                 ((CustomerEntity) user).setCart(null);
             } else if (user instanceof CourierEntity) {

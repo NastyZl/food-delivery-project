@@ -1,7 +1,6 @@
 package ru.nastyzl.fooddelivery.controller;
 
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.nastyzl.fooddelivery.dto.DishShowDto;
 import ru.nastyzl.fooddelivery.exception.DifferentVendorsException;
 import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.exception.MaxQuantityExceededException;
@@ -68,9 +68,10 @@ public class CartController {
                                 HttpServletRequest request,
                                 Model model,
                                 Principal principal) throws DishNotFoundException, DifferentVendorsException, UserNotFoundException {
-        CartEntity cart = cartService.addItemToCart(dishService.getById(id), quantity, principal.getName());
+        DishShowDto dish = dishService.getById(id);
+        CartEntity cart = cartService.addItemToCart(dish, quantity, principal.getName());
         model.addAttribute("cart", cart);
-        return "redirect:" + request.getHeader("Referer");
+        return "redirect:/menu/0";
     }
 
     @PostMapping(value = "/update-cart", params = "action=update")

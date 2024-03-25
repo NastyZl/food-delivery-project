@@ -12,9 +12,10 @@ public interface UserMapper {
     CourierEntity userDtoToCourierEntity(UserDto userDto);
 
     VendorEntity userDtoToVendorEntity(UserDto userDto);
+
     UserDto vendorEntityToUserDto(VendorEntity vendor);
 
     CustomerEntity userDtoToCustomerEntity(UserDto userDto);
-    UserDto userEntityToUserDto(UserEntity user);
 
+    UserDto userEntityToUserDto(UserEntity user);
 }

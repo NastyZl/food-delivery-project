@@ -21,12 +21,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for handling order actions.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final OrderItemRepository orderItemRepository;
     private final CartService cartService;
     private final OrderRepository orderRepository;
+
     public OrderServiceImpl(UserService userService, OrderItemRepository orderItemRepository, CartService cartService, OrderRepository orderRepository) {
         this.userService = userService;
         this.orderItemRepository = orderItemRepository;
@@ -37,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Save order and delete cart,
+     *
      * @param orderDto transfer for order
      * @return saves order
      * @throws UserNotFoundException if there is no user with the courier role in the database
@@ -88,8 +93,7 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(status);
             if (status.equals(OrderStatus.DELIVERED)) {
                 order.setOrderStatus(status);
-            }
-            else if (status.equals(OrderStatus.DONE)) {
+            } else if (status.equals(OrderStatus.DONE)) {
                 order.setOrderStatus(status);
                 order.setDeliveryDate(LocalDateTime.now());
                 CourierEntity courier = order.getCourier();

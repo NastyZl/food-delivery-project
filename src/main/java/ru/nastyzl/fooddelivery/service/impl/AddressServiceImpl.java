@@ -8,7 +8,7 @@ import ru.nastyzl.fooddelivery.repository.AddressRepository;
 import ru.nastyzl.fooddelivery.service.AddressService;
 
 /**
- * Implementation of the AddressService interface
+ * Service for handling address actions.
  */
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -22,8 +22,9 @@ public class AddressServiceImpl implements AddressService {
 
     /**
      * Save address with vendor.
+     *
      * @param addressEntity address to be saved.
-     * @param vendorEntity vendor associated with address.
+     * @param vendorEntity  vendor associated with address.
      * @return saved address.
      */
     @Override

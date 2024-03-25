@@ -3,9 +3,9 @@ package ru.nastyzl.fooddelivery.service;
 import org.springframework.data.domain.Page;
 import ru.nastyzl.fooddelivery.dto.DishCreateDto;
 import ru.nastyzl.fooddelivery.dto.DishShowDto;
+import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.exception.NullQuantityOfDishesException;
 import ru.nastyzl.fooddelivery.exception.UserNotFoundException;
-import ru.nastyzl.fooddelivery.exception.DishNotFoundException;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 
 import java.util.List;
@@ -25,6 +25,7 @@ public interface DishService {
     DishEntity update(DishCreateDto dishCreateDto);
 
     void changeDeleteFlagById(Long id) throws NullQuantityOfDishesException;
+
     Page<DishShowDto> pageDishes(int pageNo);
 
     Optional<DishEntity> findById(Long id);

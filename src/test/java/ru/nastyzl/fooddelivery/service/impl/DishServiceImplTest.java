@@ -2,7 +2,6 @@ package ru.nastyzl.fooddelivery.service.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,7 +17,6 @@ import ru.nastyzl.fooddelivery.mapper.VendorMapper;
 import ru.nastyzl.fooddelivery.model.DishEntity;
 import ru.nastyzl.fooddelivery.model.VendorEntity;
 import ru.nastyzl.fooddelivery.repository.DishRepository;
-import ru.nastyzl.fooddelivery.service.DishService;
 import ru.nastyzl.fooddelivery.service.UserService;
 
 import java.util.Arrays;

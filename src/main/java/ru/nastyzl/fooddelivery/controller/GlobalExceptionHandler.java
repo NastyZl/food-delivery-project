@@ -28,11 +28,13 @@ public class GlobalExceptionHandler {
         redirectAttributes.addFlashAttribute("message", ex.getMessage());
         return "redirect:/404";
     }
+
     @ExceptionHandler({MaxQuantityExceededException.class})
     public String handleMaxQuantityExceededException(MaxQuantityExceededException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("maxQuantityErrorMessage", ex.getMessage());
         return "redirect:/cart/";
     }
+
     @ExceptionHandler({NullQuantityOfDishesException.class})
     public String handleNullQuantityOfDishesException(NullQuantityOfDishesException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("nullQuantityErrorMessage", ex.getMessage());

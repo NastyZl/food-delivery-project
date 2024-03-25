@@ -12,9 +12,13 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<UserDto> findById(Long id);
+
     UserDto blockUnblockUser(Long id) throws RoleNotFoundException, UserNotFoundException;
+
     boolean checkAvailable(Long id);
+
     CourierEntity chooseCourier() throws UserNotFoundException;
+
     VendorEntity getVendorByUsername(String username) throws UserNotFoundException;
 
     CustomerEntity getCustomerByUsername(String username) throws UserNotFoundException;

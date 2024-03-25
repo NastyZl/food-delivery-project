@@ -60,7 +60,7 @@ public class TelegramRegistrationServiceImpl implements TelegramRegistrationServ
     }
 
     private SendMessage handleRegister(Message message) {
-        message.getContact().setPhoneNumber( getPhoneNumber(message.getContact()));
+        message.getContact().setPhoneNumber(getPhoneNumber(message.getContact()));
         userService.activateCourier((message.getContact()));
         return registerSuccessMessage(message);
     }

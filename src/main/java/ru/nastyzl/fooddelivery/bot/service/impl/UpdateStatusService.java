@@ -14,7 +14,7 @@ public class UpdateStatusService {
         this.orderService = orderService;
     }
 
-    public void sendUpdateStatus(OrderStatus status, Long idOrder)  {
+    public void sendUpdateStatus(OrderStatus status, Long idOrder) {
         try {
             orderService.updateStatusOrder(status, idOrder);
         } catch (OrderNotFoundException e) {

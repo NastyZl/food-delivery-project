@@ -55,6 +55,7 @@ public abstract class UserEntity {
         this.phone = phone;
         this.address = address;
     }
+
     public abstract UserRole getRole();
 
     public AddressEntity getAddress() {

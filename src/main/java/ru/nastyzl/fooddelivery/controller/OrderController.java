@@ -3,6 +3,7 @@ package ru.nastyzl.fooddelivery.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.nastyzl.fooddelivery.bot.service.impl.NotificationServiceImpl;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
@@ -18,6 +19,7 @@ import ru.nastyzl.fooddelivery.service.CartService;
 import ru.nastyzl.fooddelivery.service.OrderService;
 import ru.nastyzl.fooddelivery.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +48,10 @@ public class OrderController {
 
     @PostMapping("/create-order")
     public String createOrder(Principal principal,
-                              Model model, @ModelAttribute("order") OrderDto orderDto, @RequestParam("address") String address, @RequestParam("paymentType") PaymentType paymentType) throws UserNotFoundException, CartNotFoundException {
+                              Model model, @ModelAttribute("order") @Valid OrderDto orderDto, BindingResult bindingResult, @RequestParam("address") String address, @RequestParam("paymentType") PaymentType paymentType) throws UserNotFoundException, CartNotFoundException {
+        if (bindingResult.hasErrors()) {
+            return "/order/check-out";
+        }
         orderDto.setAddress(address);
         orderDto.setPaymentType(paymentType);
         orderDto.setCart(cartService.getCart(principal.getName()));

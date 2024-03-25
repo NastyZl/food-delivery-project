@@ -1,6 +1,6 @@
 package ru.nastyzl.fooddelivery.exception;
 
-public class InvalidRoleException extends Exception{
+public class InvalidRoleException extends Exception {
     public InvalidRoleException() {
     }
 }

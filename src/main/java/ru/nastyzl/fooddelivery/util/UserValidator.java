@@ -9,6 +9,9 @@ import ru.nastyzl.fooddelivery.service.UserService;
 
 import java.util.Optional;
 
+/**
+ * Implements the Validator interface to validate the input for creating a new user.
+ */
 @Component
 public class UserValidator implements Validator {
 
@@ -23,6 +26,11 @@ public class UserValidator implements Validator {
         return UserDto.class.equals(clazz);
     }
 
+    /**
+     * Validates the input and adds errors if the username already exists
+     * @param target the object to be validated
+     * @param errors the Errors object to add validation errors
+     */
     @Override
     public void validate(Object target, Errors errors) {
         UserDto userDto = (UserDto) target;

@@ -9,6 +9,9 @@ import ru.nastyzl.fooddelivery.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * Implementation of UserDetailsService interface
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository<UserEntity> userRepository;
