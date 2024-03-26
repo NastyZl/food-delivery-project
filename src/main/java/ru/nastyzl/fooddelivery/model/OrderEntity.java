@@ -5,6 +5,7 @@ import ru.nastyzl.fooddelivery.enums.PaymentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
+    public String formatterDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+        return dateTime.format(formatter);
+    }
 
     public CustomerEntity getCustomer() {
         return customer;
@@ -122,16 +127,16 @@ public class OrderEntity {
         return id;
     }
 
-    public LocalDateTime getOrderDate() {
-        return orderDate;
+    public String getOrderDate() {
+        return formatterDateTime(orderDate);
     }
 
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
-    public LocalDateTime getDeliveryDate() {
-        return deliveryDate;
+    public String getDeliveryDate() {
+        return formatterDateTime(deliveryDate);
     }
 
     public void setDeliveryDate(LocalDateTime deliveryDate) {

@@ -98,6 +98,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(userMapper::userEntityToUserDto).collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<List<CourierEntity>> findAllActivatedCourier() {
+        return userRepository.findAllActivatedCouriers();
+    }
+
 
     @Override
     public Optional<CourierEntity> findCourierByChatId(Long id) {

@@ -69,7 +69,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 long chatId = update.getMessage().getChatId();
 
                 switch (messageText) {
-                    case "/orders":
+                    case "/site":
                         break;
                     case "/help":
                         sendMessage(chatId, HELP_TEXT);
@@ -122,7 +122,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
-        executeMessage(message);
+        sendMessage(message);
     }
 
     public Integer sendMessageAndGetId(SendMessage sendMessage) {
@@ -140,14 +140,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void sendEditMessageText(EditMessageText editMessageText) {
         try {
             execute(editMessageText);
-        } catch (TelegramApiException e) {
-            logger.error("Сообщение не отправлено в бот: " + e.getMessage());
-        }
-    }
-
-    private void executeMessage(SendMessage message) {
-        try {
-            execute(message);
         } catch (TelegramApiException e) {
             logger.error("Сообщение не отправлено в бот: " + e.getMessage());
         }

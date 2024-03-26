@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.nastyzl.fooddelivery.bot.service.impl.NotificationServiceImpl;
+import ru.nastyzl.fooddelivery.bot.service.NotificationService;
 import ru.nastyzl.fooddelivery.dto.OrderDto;
 import ru.nastyzl.fooddelivery.enums.PaymentType;
 import ru.nastyzl.fooddelivery.enums.UserRole;
@@ -32,13 +32,13 @@ public class OrderController {
     private final UserService userService;
     private final OrderService orderService;
     private final CartService cartService;
-    private final NotificationServiceImpl notificationServiceImpl;
+    private final NotificationService notificationService;
 
-    public OrderController(UserService userService, OrderService orderService, CartService cartService, NotificationServiceImpl notificationServiceImpl) {
+    public OrderController(UserService userService, OrderService orderService, CartService cartService, NotificationService notificationService) {
         this.userService = userService;
         this.orderService = orderService;
         this.cartService = cartService;
-        this.notificationServiceImpl = notificationServiceImpl;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/check-out")
@@ -55,7 +55,7 @@ public class OrderController {
             return "/order/check-out";
         }
         OrderEntity order = orderService.save(orderDto);
-        notificationServiceImpl.sendNotification(order);
+        notificationService.sendNotification(order);
         model.addAttribute("order", order);
         return "redirect:/order/my-orders";
     }

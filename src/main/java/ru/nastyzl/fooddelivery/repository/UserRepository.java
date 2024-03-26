@@ -28,6 +28,9 @@ public interface UserRepository<T extends UserEntity> extends JpaRepository<T, L
     @Query("from CourierEntity c where c.phone=:phone")
     Optional<CourierEntity> findCourierByPhoneNumber(@Param("phone") String phone);
 
+    @Query("from CourierEntity c where c.chatId != null")
+    Optional<List<CourierEntity>> findAllActivatedCouriers();
+
     Optional<? extends UserEntity> findByUsername(String username);
 
 }

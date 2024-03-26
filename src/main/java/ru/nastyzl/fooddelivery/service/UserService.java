@@ -33,6 +33,8 @@ public interface UserService {
 
     List<UserDto> findAll();
 
+    Optional<List<CourierEntity>> findAllActivatedCourier();
+
     Optional<CourierEntity> findCourierByChatId(Long id);
 
     Optional<CourierEntity> findCourierByPhoneNumber(String phone);
