@@ -10,119 +10,117 @@
 <body>
 <th:block th:include="/navbar"></th:block>
 
-<div class="cart-box-main">
-    <div class="container">
-        <form class="needs-validation" th:action="@{/order/create-order}" th:method="post"  th:object="${order}">
-            <div class="row">
-                <div class="col-sm-6 col-lg-6 mb-3">
-                    <div class="checkout-address">
+<div class="container">
+    <form class="needs-validation" th:action="@{/order/create-order}" th:method="post" th:object="${order}">
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="checkout-address">
 
-                        <div class="title-left">
-                            <h3>Личные данные</h3>
+                    <div class="title-left">
+                        <h3>Личные данные</h3>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username">Имя</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:field="*{cart.customer.firstName}"
+                                   id="username" readonly>
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="username">Имя</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" th:field="*{cart.customer.firstName}"
-                                       id="username" readonly>
-                            </div>
+                    <div class="mb-3">
+                        <label for="phone">Номер телефона</label>
+                        <input type="text" class="form-control" th:field="*{cart.customer.phone}" id="phone"
+                               readonly>
+                    </div>
+
+                    <!--                        <a th:href="@{/profile}" class="btn btn-primary"> Изменить личную информацию</a>-->
+
+                    <div class="mb-3">
+                        <label for="address">Адрес *</label>
+                        <input type="text" class="form-control" id="address" th:field="*{address}" th:name="address"
+                               placeholder="Введите адрес для доставки">
+                        <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
+                            Address Error
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="phone">Номер телефона</label>
-                            <input type="text" class="form-control" th:field="*{cart.customer.phone}" id="phone"
-                                   readonly>
+                    <hr class="mb-4">
+                    <div class="title"><span>Выберете пособ оплаты</span></div>
+                    <div class="d-block my-3">
+                        <!--                            <div class=" custom-control custom-radio"-->
+                        <!--                                 th:each="type : ${T(ru.nastyzl.fooddelivery.enums.PaymentType).values()}">-->
+                        <!--                                <input type="radio" class="custom-control-input" th:id="${type}" th:name="paymentType"-->
+                        <!--                                       th:value="${type}"/>-->
+                        <!--                                <label class="custom-control-label" th:for="${type}" th:text="${type.value}"></label>-->
+                        <!--                            </div>-->
+
+                        <div class="form-group">
+                            <select class="form-control" id="status" th:field="*{paymentType}">
+                                <option th:each="type : ${T(ru.nastyzl.fooddelivery.enums.PaymentType).values()}"
+                                        th:value="${type}" th:text="${type.value}"></option>
+                            </select>
                         </div>
-
-                        <!--                        <a th:href="@{/profile}" class="btn btn-primary"> Изменить личную информацию</a>-->
-
-                        <div class="mb-3">
-                            <label for="address">Адрес *</label>
-                            <input type="text" class="form-control" id="address" th:field="*{address}" th:name="address"
-                                   placeholder="Введите адрес для доставки">
-                            <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
-                                Address Error
-                            </div>
-                        </div>
-
-                        <hr class="mb-4">
-                        <div class="title"><span>Выберете пособ оплаты</span></div>
-                        <div class="d-block my-3">
-<!--                            <div class=" custom-control custom-radio"-->
-<!--                                 th:each="type : ${T(ru.nastyzl.fooddelivery.enums.PaymentType).values()}">-->
-<!--                                <input type="radio" class="custom-control-input" th:id="${type}" th:name="paymentType"-->
-<!--                                       th:value="${type}"/>-->
-<!--                                <label class="custom-control-label" th:for="${type}" th:text="${type.value}"></label>-->
-<!--                            </div>-->
-
-                            <div class="form-group">
-                                <select class="form-control" id="status" th:field="*{paymentType}">
-                                    <option  th:each="type : ${T(ru.nastyzl.fooddelivery.enums.PaymentType).values()}"
-                                             th:value="${type}" th:text="${type.value}"></option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <hr class="mb-1">
-
 
                     </div>
+                    <hr class="mb-1">
+
+
                 </div>
-                <div class="col-sm-6 col-lg-6 mb-3">
-                    <input type="hidden" name="id" th:field="*{cart.id}" th:name="*{cart.id}">
-                    <input type="hidden" name="id" th:field="*{cart.customer}" th:name="*{cart.customer}">
-                    <input type="hidden" name="id" th:field="*{cart.cartItems}" th:name="*{cart.cartItems}">
-                    <input type="hidden" name="id" th:field="*{cart.totalItems}" th:name="*{cart.totalItems}">
-                    <input type="hidden" name="id" th:field="*{cart.totalPrise}" th:name="*{cart.totalPrise}">
-                    <div class="col-md-12 col-lg-12">
-                        <div class="odr-box">
-                            <div class="title-left">
-                                <h3>Корзина</h3>
-                            </div>
-                            <div class="rounded p-2 bg-light">
-                                <div class="media mb-2 border-bottom" th:each="item : *{cart.cartItems}">
-                                    <div class="media-body"><p th:text="${item.dish.dishName}"></p>
-                                        <div class="small text-muted">
-                                            Цена: [(${item.dish.currentPrice})] ₽
-                                            <span class="mx-2">|</span>
-                                            Количество: [(${item.quantity})]
-                                            <span class="mx-2">|</span>
-                                            Всего: [(${item.dish.currentPrice * item.quantity})] ₽
-                                        </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <input type="hidden" name="id" th:field="*{cart.id}" th:name="*{cart.id}">
+                <input type="hidden" name="id" th:field="*{cart.customer}" th:name="*{cart.customer}">
+                <input type="hidden" name="id" th:field="*{cart.cartItems}" th:name="*{cart.cartItems}">
+                <input type="hidden" name="id" th:field="*{cart.totalItems}" th:name="*{cart.totalItems}">
+                <input type="hidden" name="id" th:field="*{cart.totalPrise}" th:name="*{cart.totalPrise}">
+                <div class="col-md-12 col-lg-12">
+                    <div class="odr-box">
+                        <div class="title-left">
+                            <h3>Корзина</h3>
+                        </div>
+                        <div class="rounded p-2 bg-light">
+                            <div class="media mb-2 border-bottom" th:each="item : *{cart.cartItems}">
+                                <div class="media-body"><p th:text="${item.dish.dishName}"></p>
+                                    <div class="small text-muted">
+                                        Цена: [(${item.dish.currentPrice})] ₽
+                                        <span class="mx-2">|</span>
+                                        Количество: [(${item.quantity})]
+                                        <span class="mx-2">|</span>
+                                        Всего: [(${item.dish.currentPrice * item.quantity})] ₽
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <div class="col-md-12 col-lg-12">
-                        <div class="order-box">
-                            <div class="title-left">
-                                <h2><b>Итого</b></h2>
-                            </div>
-                            <hr class="my-1">
-                            <div class="d-flex">
-                                <h4>Стоимость блюд   </h4>
-                                <div class="ml-auto font-weight-bold" th:text="*{cart.totalPrise}"></div>
-                            </div>
-                            <hr class="my-1">
-                            <div class="d-flex">
-                                <h4>Строимость доставки    </h4>
-                                <div class="ml-auto font-weight-bold"> бесплатно</div>
-                            </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="col-md-12 col-lg-12">
+                    <div class="order-box">
+                        <div class="title-left">
+                            <h2><b>Итого</b></h2>
+                        </div>
+                        <hr class="my-1">
+                        <div class="d-flex">
+                            <h4>Стоимость блюд </h4>
+                            <div class="ml-auto font-weight-bold" th:text="*{cart.totalPrise}"></div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="d-flex">
+                            <h4>Строимость доставки </h4>
+                            <div class="ml-auto font-weight-bold"> бесплатно</div>
                         </div>
                     </div>
-                    <div class="col-12 d-flex shopping-box">
-                        <button type="submit" class="ml-auto btn btn-black">Заказать</button>
-                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-dark">Заказать</button>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 

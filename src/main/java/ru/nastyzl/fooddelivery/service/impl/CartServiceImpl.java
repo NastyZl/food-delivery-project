@@ -94,8 +94,8 @@ public class CartServiceImpl implements CartService {
 
                 if (quantity > maxQuantity) {
 
-                    throw new MaxQuantityExceededException("Запрошенное количество товара " + dish.getDishName() + " отсутствует." + "\n" +
-                            " Пожалуйста, выберите количество меньше максимально допустимого ( " + maxQuantity + " )");
+                    throw new MaxQuantityExceededException("Запрошенное количество товара '" + dish.getDishName() + "' отсутствует." + "\n" +
+                            " Пожалуйста, выберите количество меньше максимально допустимого (" + maxQuantity + ")");
                 }
                 if (quantity.equals(maxQuantity)) {
                     dish.setQuantity(0);

@@ -36,18 +36,21 @@
             <td th:text="${dish.quantity}"></td>
             <form class="form-horizontal" th:action="@{'/dish/' + ${dish.id}}" th:method="PATCH">
                 <td>
-                    <button type="submit">🗘</button>
+                    <button class="btn btn-dark" type="submit">Редактировать</button>
                 </td>
             </form>
             <form class="form-horizontal" th:action="@{'/dish/' + ${dish.id}}" th:method="DELETE">
-                <td >
-                    <button type="submit" th:text="${dish.deleted} ? 'Восстановить' : 'Удалить'"  th:onclick="return confirm('Вы уверены?')">Удалить</button>
+                <td>
+                    <button class="btn btn-dark" type="submit" th:text="${dish.deleted} ? 'Восстановить' : 'Удалить'"
+                            th:onclick="return confirm('Вы уверены?')"></button>
                 </td>
             </form>
         </tr>
         </tbody>
     </table>
-    <input type="button" value="Добавить новое блюдо" onclick="location.href='/dish/new';"/>
+    <div style="text-align: center">
+        <input type="button" class="btn btn-dark" value="Добавить новое блюдо" onclick="location.href='/dish/new';"/>
+    </div>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

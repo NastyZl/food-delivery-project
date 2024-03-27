@@ -69,7 +69,7 @@ public class OrderController {
             List<OrderItemEntity> orderItems = order.getOrderItems();
             model.addAttribute("order", order);
         } else throw new OrderNotFoundException("Информация озаказе удалена");
-        return "redirect:/404";
+        return "order/detail";
     }
 
 

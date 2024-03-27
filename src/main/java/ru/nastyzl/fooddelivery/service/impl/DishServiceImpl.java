@@ -83,7 +83,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Page<DishShowDto> pageDishes(int pageNo) {
-        Pageable pageable = PageRequest.of(pageNo, 10);
+        Pageable pageable = PageRequest.of(pageNo, 8);
         Page<DishEntity> dishEntityPage = dishRepository.pageDishes(pageable);
         return dishEntityPage.map(this::dishEntityToDishShowDto);
     }

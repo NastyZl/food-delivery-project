@@ -20,7 +20,10 @@ public class UserDto {
     private String phone;
 
     @Email(message = "Email должен быть корректным адресом электронной почты")
+    @NotBlank(message = "Необходимо указать email")
     private String email;
+
+    @NotBlank(message = "Необходимо указать пароль")
     private String password;
 
     @NotBlank(message = "Необходимо указать город")

@@ -29,11 +29,11 @@
             <td th:text="${order.id}"></td>
             <td th:text="${order.orderDate}"></td>
             <td th:text="${order.totalAmount}"></td>
-            <td th:text="${order.orderStatus}"></td>
+            <td th:text="${order.orderStatus.getValue()}"></td>
             <td th:if="${order.orderStatus.value} == 'Выполен'" th:text="${order.deliveryDate}"></td>
             <td th:if="${order.orderStatus.value != 'Выполен'}">-</td>
             <td>
-                <a href="#" th:href="@{/order/detail/{id}(id=${order.id})}">подробнее (в разработке)</a>
+                <a href="#" th:href="@{/order/detail/{id}(id=${order.id})}" class="btn btn-dark">подробнее</a>
             </td>
         </tr>
         </tbody>

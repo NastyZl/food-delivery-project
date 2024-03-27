@@ -21,8 +21,6 @@
                         <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Регистрация</h3>
 
                         <form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
-
-
                             <div class="form-group">
                                 <label class="form-label" for="firstName">Введите имя: </label>
                                 <input type="text" id="firstName" th:field="*{firstName}"
@@ -32,8 +30,6 @@
                                     First name Error
                                 </div>
                             </div>
-
-
                             <div class="form-group">
                                 <label class="form-label" for="lastName">Введите фамилию: </label>
                                 <input type="text" id="lastName" th:field="*{lastName}"
@@ -43,47 +39,43 @@
                                     name Error
                                 </div>
                             </div>
-
-
                             <div class="form-group">
-                                <label for="username">Введите имя пользователя: </label>
+                                <label for="username">Введите логин: </label>
                                 <input type="text" th:field="*{username}" id="username"
                                        class="form-control form-control-lg"/>
                                 <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
                                     Username Error
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="email">Введите email: </label>
                                 <input type="text" th:field="*{email}" id="email"
                                        class="form-control form-control-lg"/>
-                                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email name
+                                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+                                    name
                                     Error
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="phone">Введите номер телефона: </label>
                                 <input type="text" th:field="*{phone}" id="phone"
                                        class="form-control form-control-lg"/>
-                                <div style="color:red" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone name
+                                <div style="color:red" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone
+                                    name
                                     Error
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="password">Введите пароль: </label>
                                 <input type="password" th:field="*{password}" id="password"
-                                class="form-control form-control-lg"/>
+                                       class="form-control form-control-lg"/>
                                 <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
                                     Password Error
                                 </div>
                             </div>
-
-                            di
-
-                            <select id="role" name="role" th:field="*{role}" onchange="showVendorFields()">
+                            <label for="role">Выберете роль: </label>
+                            <select id="role" class="form-select" name="role" th:field="*{role}"
+                                    onchange="showVendorFields()">
                                 <option th:each="role : ${T(ru.nastyzl.fooddelivery.enums.UserRole).values()}"
                                         th:if="${role != T(ru.nastyzl.fooddelivery.enums.UserRole).ADMIN}"
                                         th:value="${role.value}"
@@ -92,41 +84,63 @@
                             </select>
                             <br/>
                             <div id="vendorFields" style="display: none;">
-                                apartment: <input type="text" th:field="*{apartment}" id="apartment" name="apartment">
-                                <div style="color:red" th:if="${#fields.hasErrors('apartment')}"
-                                     th:errors="*{apartment}">apartment Error
+                                <div class="form-group">
+                                    <label for="city">Введите город: </label>
+                                    <input type="text" th:field="*{city}" id="city"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">
+                                        Error
+                                    </div>
                                 </div>
-
-                                city: <input type="text" th:field="*{city}" id="city" name="city">
-                                <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city
-                                    Error
+                                <div class="form-group">
+                                    <label for="streetName">Введите улицу: </label>
+                                    <input type="text" th:field="*{city}" id="streetName"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('streetName')}"
+                                         th:errors="*{streetName}">
+                                        Error
+                                    </div>
                                 </div>
-
-                                entrance: <input type="text" th:field="*{entrance}" id="entrance" name="entrance">
-                                <div style="color:red" th:if="${#fields.hasErrors('entrance')}" th:errors="*{entrance}">
-                                    entrance Error
+                                <div class="form-group">
+                                    <label for="city">Введите номер дома: </label>
+                                    <input type="text" th:field="*{streetNumber}" id="streetNumber"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('streetNumber')}"
+                                         th:errors="*{streetNumber}">
+                                        Error
+                                    </div>
                                 </div>
-
-                                floor: <input type="text" th:field="*{floor}" id="floor" name="floor">
-                                <div style="color:red" th:if="${#fields.hasErrors('floor')}" th:errors="*{floor}">floor
-                                    Error
+                                <div class="form-group">
+                                    <label for="apartment">Введите номер квартиры: </label>
+                                    <input type="text" th:field="*{apartment}" id="apartment"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('apartment')}"
+                                         th:errors="*{apartment}">
+                                        Error
+                                    </div>
                                 </div>
-
-                                streetName: <input type="text" th:field="*{streetName}" id="streetName"
-                                                   name="streetName">
-                                <div style="color:red" th:if="${#fields.hasErrors('streetName')}"
-                                     th:errors="*{streetName}">streetName Error
+                                <div class="form-group">
+                                    <label for="entrance">Введите подъезд: </label>
+                                    <input type="text" th:field="*{entrance}" id="entrance"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('entrance')}"
+                                         th:errors="*{entrance}">
+                                        Error
+                                    </div>
                                 </div>
-
-                                streetNumber: <input type="text" th:field="*{streetNumber}" id="streetNumber"
-                                                     name="streetNumber">
-                                <div style="color:red" th:if="${#fields.hasErrors('streetNumber')}"
-                                     th:errors="*{streetNumber}">streetNumber Error
+                                <div class="form-group">
+                                    <label for="floor">Введите этаж: </label>
+                                    <input type="text" th:field="*{floor}" id="floor"
+                                           class="form-control form-control-lg"/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('floor')}" th:errors="*{floor}">
+                                        Error
+                                    </div>
                                 </div>
-
+                                <br>
                             </div>
-
-                            <input type="submit" value="Sign up!"/>
+                            <div style="text-align: center">
+                                <input type="submit" class="btn btn-dark" value="Зарегистрироваться"/>
+                            </div>
                         </form>
                     </div>
                 </div>

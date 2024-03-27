@@ -13,55 +13,88 @@
 <div class="cart-box-main">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12" style="display: flex; justify-content: space-between;">
                 <div class="table-main table-responsive">
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Images</th>
-                            <th>Product Name</th>
-                            <th>Price</th>
+                            <th>Название</th>
+                            <th>Количество</th>
+                            <th>Цена</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="orderitem: ${order}">
-                            <td class="thumbnail-img">
-                                <a href="#">
-                                    <img class="img-fluid"
-                                         th:src="'data:image/jepg;base64,' + ${orderdetail.dish.imgPath}" alt=""/>
-                                </a>
-                            </td>
+                        <tr th:each="orderdetail: ${order.orderItems}">
                             <td class="name-pr">
                                 <p th:text="${orderdetail.dish.dishName}"></p>
                             </td>
-                            <td class="price-pr">
-                                <p th:text="'$' + ${orderdetail.dish.currentPrice}"></p>
+                            <td class="name-pr">
+                                <p th:text="${orderdetail.quantity}"></p>
+                            </td>
+                            <td class="name-pr">
+                                <p th:text="${orderdetail.dish.currentPrice}"></p>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="row my-5">
+                    <div>
+                        <div class="order-box">
+                            <h3>Итого</h3>
+                            <div class="d-flex">
+                                <p><b>Общая стоимость</b> </p>
+                                <div class="col-lg-2"></div>
+                                <div class="ml-auto font-weight-bold" th:text="${order.totalAmount} + ' ₽'"></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Статус заказа </b></p>
+                                <div class="col-lg-2"></div>
+                                <div class="ml-auto font-weight-bold" th:text="${order.orderStatus.getValue()}"></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Покупатель</b> </p>
+                                <div class="col-lg-2"></div>
+                                <div class="ml-auto font-weight-bold"
+                                     th:text="' '+${order.customer.firstName} + ' ' + ${order.customer.lastName} "></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Адрес доставки </b></p>
+                                <div class="col-lg-2"></div>
 
-                    <div class="row my-5">
-                        <div class="col-lg-8 col-sm-12"></div>
-                        <div class="col-lg-4 col-sm-12">
-                            <div class="order-box">
-                                <h3>Order summary</h3>
-                                <div class="d-flex">
-                                    <h4>Sub Total</h4>
-                                    <div class="ml-auto font-weight-bold" th:text="${order.totalAmount}"></div>
-                                </div>
-                                <hr class="my-1">
+                                <div class="ml-auto font-weight-bold" th:text="' '+${order.customerAddress} "></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Повар </b></p>
+                                <div class="col-lg-2"></div>
+
+                                <div class="ml-auto font-weight-bold"
+                                     th:text="' '+${order.vendor.firstName} + ' ' + ${order.vendor.lastName} "></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Статус </b></p>
+                                <div class="col-lg-2"></div>
+
+                                <div class="ml-auto font-weight-bold" th:text="' '+${order.orderStatus.getValue()} "></div>
+                            </div>
+                            <div class="d-flex">
+                                <p><b>Дата заказа </b></p>
+                                <div class="col-lg-2"></div>
+
+                                <div class="ml-auto font-weight-bold" th:text="' '+${order.orderDate} "></div>
+                            </div>
+                            <div class="d-flex" th:if="${order.orderStatus} == 'DONE' ">
+                                <p><b>Дата доставки</b></p>
+                                <div class="col-lg-2"></div>
+
+                                <div class="ml-auto font-weight-bold" th:text="' '+${order.orderDate} "></div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 </body>
-
 </html>
